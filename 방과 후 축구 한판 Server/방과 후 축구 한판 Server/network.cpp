@@ -51,6 +51,14 @@ SOCKET AcceptClient(SOCKET listenSocket) {
         std::cerr << "Accept failed" << std::endl;
         return INVALID_SOCKET;
     }
+
+    /*int flag = 1;
+    int result = setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&flag, sizeof(flag));
+
+    if (result == SOCKET_ERROR) {
+        printf("setsockopt failed: %d\n", WSAGetLastError());
+    }*/
+
     return clientSocket;
 }
 
@@ -66,51 +74,45 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
     int playerID = context->playerID;
 
     PacketHeader header;
-    char tempBuffer[1024];
-
     while (true) {
         // 헤더 수신
         if (!RecvTCP(sock, (char*)&header, sizeof(PacketHeader))) {
             break;
         }
-
         // 패킷 정보 변환 
         header.size = ntohs(header.size);
         header.type = ntohs(header.type);
 
         // 실제 데이터 크기 오류 체크
-        int payloadSize = header.size - sizeof(PacketHeader);
+        int payloadSize = header.size;
         if (payloadSize < 0 || payloadSize >(1024 - sizeof(PacketHeader))) {
             std::cerr << "잘못된 패킷 사이즈 " << playerID << std::endl;
             continue;
         }
 
-        std::cout << header.size << std::endl;
-
+        std::cout << header.type << std::endl;
         // 패킷 타입에 따라 분기
         switch (header.type) {
 
             // 입력값 처리
         case PKT_INPUT_KEY: {
             PacketInputkey input_key;
-            if (!RecvTCP(sock, (char*)input_key.key, payloadSize)) {
+            if (!RecvTCP(sock, (char*)&input_key + sizeof(PacketHeader), header.size)) {
+                std::cout << "error_recv: key" << std::endl;
                 break;
             }
-            printf("%c", (char)input_key.key);
             break;
         }
         case PKT_INPUT_SPECIALKEY: {
-            PacketInputspecialkey input_special;
-            if (!RecvTCP(sock, (char*)input_special.specialkey, payloadSize)) {
+            PacketInputspecialkey input_skey;
+            if (!RecvTCP(sock, (char*)&input_skey + sizeof(PacketHeader), header.size)) {
+                std::cout << "error_recv: skey" << std::endl;
                 break;
             }
-
             break;
-        }
-
-                                 // Login 처리
+        }     
         case PKT_LOGIN: {
-
+            // Login 처리
             break;
         }
 
@@ -138,7 +140,7 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
 bool RecvTCP(SOCKET sock, char* buffer, int size) {
     int bytesRead = 0;
     while (bytesRead < size) {
-        int result = recv(sock, buffer + bytesRead, size - bytesRead, MSG_WAITALL);
+        int result = recv(sock, buffer + bytesRead, size - bytesRead, 0);
         if (result == SOCKET_ERROR || result == 0) {
             std::cerr << "Client disconnected (ID: " << (int)sock << ")" << std::endl;
             return false;

@@ -2,7 +2,7 @@
 #include "Packet.h"
 
 // --- connect함수 ---
-bool ConnectToServer(SOCKET g_ServerSocket, const char* ipAddress, uint16_t port);
+bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port);
 
 // --- 수신된 패킷을 처리하는 함수 ---
 void ProcessPacket(SOCKET socket, const PacketHeader& header, char* payload);

@@ -472,27 +472,25 @@ void make_Light() {
     glUniform3f(viewPosLocation, light.getViewPos().x, light.getViewPos().y, light.getViewPos().z);
 }
 
-// 조작
-void PlayerInput(int key_value, PacketInputkey* key, SOCKET sock) {
-    if (key->key[key_value])
-        key->key[key_value] = 0;
-    else
-        key->key[key_value] = 1;
-    int sent = send(sock, (char*)key, sizeof(PacketInputkey), 0);
-    if (!sent) {
-        perror("key_value error");
-    }
-    printf("%c", key_value);
-}
-
-void PlayerInput_Special(int key_value, PacketInputspecialkey* specialkey, SOCKET sock) {
-    specialkey->specialkey[key_value] = !specialkey->specialkey[key_value];
-    int sent = send(sock, (char*)specialkey, sizeof(PacketInputspecialkey), 0);
-    if (sent != sizeof(PacketInputspecialkey)) {
-        perror("send error");
+//
+void PlayerInput(int key_value, PacketInputkey& key, SOCKET sock, bool toggle) {
+    key.k_type = key_value;
+    key.k_toggle = toggle;
+    int sent = send(sock, (char*)&key, sizeof(PacketInputkey), 0);
+    if (sent == SOCKET_ERROR) {
+        int err = WSAGetLastError();
+        std::cerr << "send1 failed. WSAGetLastError = " << err << std::endl;
     }
 }
-
+void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock, bool toggle) {
+    key.k_type = key_value;
+    key.k_toggle = toggle;
+    int sent = send(sock, (char*)&key, sizeof(PacketInputspecialkey), 0);
+    if (sent == SOCKET_ERROR) {
+        int err = WSAGetLastError();
+        std::cerr << "send1 failed. WSAGetLastError = " << err << std::endl;
+    }
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // 도형 만들기(사용안함)

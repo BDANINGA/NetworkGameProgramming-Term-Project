@@ -13,7 +13,7 @@ Camera camera;
 Light light;
 
 PacketInputkey input{};
-PacketInputspecialkey specialinput{};
+PacketInputspecialkey s_input{};
 
 extern SOCKET g_ServerSocket;
 //------------------------------------------------------------------------
@@ -69,8 +69,8 @@ void Keyboard(unsigned char key, int x, int y) {
 
 	case 'd':
 	case 'D':
-		PlayerInput('d', &input, g_ServerSocket);
-		player.changeShooting(player.isShooting());
+		PlayerInput('d', input, g_ServerSocket, true);
+		//player.changeShooting(player.isShooting());
 		break;
 
 	case 'r':
@@ -81,18 +81,18 @@ void Keyboard(unsigned char key, int x, int y) {
 		break;
 	case 'e':
 	case 'E':
-		PlayerInput('e', &input, g_ServerSocket);
-		player.Sprint();
+		PlayerInput('e', input, g_ServerSocket, true);
+		//player.Sprint();
 		break;
 	case 'z':
 	case 'Z':
-		PlayerInput('z', &input, g_ServerSocket);
-		player.changeCurve(player.isCurve());
+		PlayerInput('z', input, g_ServerSocket, true);
+		//player.changeCurve(player.isCurve());
 		break;
 	case 'c':
 	case 'C':
-		PlayerInput('c', &input, g_ServerSocket);
-		player.changeStrong(player.isStrong());
+		PlayerInput('c', input, g_ServerSocket, true);
+		//player.changeStrong(player.isStrong());
 		break;
 	case 'q':
 		// debug: game_quit
@@ -105,23 +105,23 @@ void KeyboardUp(unsigned char key, int x, int y) {
 	switch (key) {
 	case 'd':
 	case 'D':
-		PlayerInput('d', &input, g_ServerSocket);
-		player.Shoot(ball);
+		PlayerInput('d', input, g_ServerSocket, false);
+		//player.Shoot(ball);
 		break;
 	case 'e':
 	case 'E':
-		PlayerInput('e', &input, g_ServerSocket);
-		player.Walk();
+		PlayerInput('e', input, g_ServerSocket, false);
+		//player.Walk();
 		break;
 	case 'z':
 	case 'Z':
-		PlayerInput('z', &input, g_ServerSocket);
-		player.changeCurve(player.isCurve());
+		PlayerInput('z', input, g_ServerSocket, false);
+		//player.changeCurve(player.isCurve());
 		break;
 	case 'c':
 	case 'C':
-		PlayerInput('c', &input, g_ServerSocket);
-		player.changeStrong(player.isStrong());
+		PlayerInput('c', input, g_ServerSocket, false);
+		//player.changeStrong(player.isStrong());
 		break;
 	}
 	glutPostRedisplay();
@@ -146,20 +146,16 @@ void Motion(int x, int y)
 GLvoid SpecialKeys(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_UP:
-		// PlayerInput_Special('GLUT_KEY_UP', &specialinput, sock);
-		player.keyDown(GLUT_KEY_UP);
+		PlayerInput_special(GLUT_KEY_UP, s_input, g_ServerSocket, true);
 		break;
 	case GLUT_KEY_DOWN:
-		// PlayerInput_Special('GLUT_KEY_DOWN', &specialinput, sock);
-		player.keyDown(GLUT_KEY_DOWN);
+		PlayerInput_special(GLUT_KEY_DOWN, s_input, g_ServerSocket, true);
 		break;
 	case GLUT_KEY_LEFT:
-		// PlayerInput_Special('GLUT_KEY_LEFT', &specialinput, sock);
-		player.keyDown(GLUT_KEY_LEFT);
+		PlayerInput_special(GLUT_KEY_LEFT, s_input, g_ServerSocket, true);
 		break;
 	case GLUT_KEY_RIGHT:
-		// PlayerInput_Special('GLUT_KEY_RIGHT', &specialinput, sock);
-		player.keyDown(GLUT_KEY_RIGHT);
+		PlayerInput_special(GLUT_KEY_RIGHT, s_input, g_ServerSocket, true);
 		break;
 	}
 	glutPostRedisplay();  // 화면 갱신
@@ -167,19 +163,19 @@ GLvoid SpecialKeys(int key, int x, int y) {
 GLvoid SpecialKeysUp(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_UP:
-		PlayerInput_Special(GLUT_KEY_UP, &specialinput, g_ServerSocket);
+		PlayerInput_special(GLUT_KEY_UP, s_input, g_ServerSocket, false);
 		player.keyUp(GLUT_KEY_UP);
 		break;
 	case GLUT_KEY_DOWN:
-		PlayerInput_Special(GLUT_KEY_DOWN, &specialinput, g_ServerSocket);
+		PlayerInput_special(GLUT_KEY_DOWN, s_input, g_ServerSocket, false);
 		player.keyUp(GLUT_KEY_DOWN);
 		break;
 	case GLUT_KEY_LEFT:
-		PlayerInput_Special(GLUT_KEY_LEFT, &specialinput, g_ServerSocket);
+		PlayerInput_special(GLUT_KEY_LEFT, s_input, g_ServerSocket, false);
 		player.keyUp(GLUT_KEY_LEFT);
 		break;
 	case GLUT_KEY_RIGHT:
-		PlayerInput_Special(GLUT_KEY_RIGHT, &specialinput, g_ServerSocket);
+		PlayerInput_special(GLUT_KEY_RIGHT, s_input, g_ServerSocket, false);
 		player.keyUp(GLUT_KEY_RIGHT);
 		break;
 	}

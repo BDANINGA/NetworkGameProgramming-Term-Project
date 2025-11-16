@@ -84,8 +84,8 @@ void projectionTransform();
 void make_Light();
 
 // 조작
-void PlayerInput(int key_value, PacketInputkey* key, SOCKET sock);
-void PlayerInput_Special(int key_value, PacketInputspecialkey* specialkey, SOCKET sock);
+void PlayerInput(int key_value, PacketInputkey& key, SOCKET sock, bool toggle);
+void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock, bool toggle);
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // 도형 만들기(사용안함)

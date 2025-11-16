@@ -3,15 +3,8 @@
 extern bool gameover;
 
 // --- connectÇÔ¼ö ---
-bool ConnectToServer(SOCKET g_ServerSocket, const char* ipAddress, uint16_t port)
+bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port)
 {
-    WSADATA wsaData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    {
-        std::cerr << "WSAStartup failed" << std::endl;
-        return false;
-    }
-
     g_ServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (g_ServerSocket == INVALID_SOCKET)
     {

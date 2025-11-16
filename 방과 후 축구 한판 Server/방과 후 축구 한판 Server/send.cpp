@@ -18,7 +18,7 @@ void send_renderdata(SOCKET socket, PacketRenderData& renderdata) {
     if (sent1 == sizeof(PacketHeader))
         printf("error send_renderdata.header");
 
-    char* memptr;
+    char* memptr{};
 	int memsize = sizeof(PlayerData) + sizeof(BallData) + sizeof(KeeperData);
 	memcpy(memptr, &renderdata.p_data, sizeof(PlayerData));
 	memset(memptr + sizeof(PlayerData), (int) & renderdata.b_data, sizeof(BallData));
