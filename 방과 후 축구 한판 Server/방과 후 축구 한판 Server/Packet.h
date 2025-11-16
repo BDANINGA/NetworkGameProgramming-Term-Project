@@ -13,7 +13,7 @@
 
 struct PacketHeader {
 	uint16_t type;    // 패킷 종류(ex.로그인, 유저데이터, 키입력 등)
-	uint16_t size;    // 전체 패킷 크기
+	uint16_t size;    // 데이터 크기
 };
 
 // Server -> Client
@@ -67,12 +67,14 @@ struct PacketGameover {
 // Client -> Server
 struct PacketInputkey {
 	PacketHeader header{ htons(PKT_INPUT_KEY), htons(sizeof(PacketInputkey) - sizeof(PacketHeader)) };
-	uint8_t key[256]{};
+	uint8_t k_type;
+	uint8_t k_toggle;
 };
 
 struct PacketInputspecialkey {
-	PacketHeader header{ htons(PKT_INPUT_SPECIALKEY), htons(sizeof(PacketInputspecialkey) - sizeof(PacketHeader)) };
-	uint8_t specialkey[256]{};
+	PacketHeader header{ htons(PKT_INPUT_SPECIALKEY), htons(sizeof(PacketInputkey) - sizeof(PacketHeader)) };
+	uint8_t k_type;
+	uint8_t k_toggle;
 };
 
 struct PacketLogin {

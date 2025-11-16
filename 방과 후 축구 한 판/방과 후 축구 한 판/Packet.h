@@ -54,7 +54,7 @@ struct KeeperData {
 
 struct PacketRenderData {
 	PacketHeader header{ htons(PKT_RENDER_DATA), htons(sizeof(PacketRenderData) - sizeof(PacketHeader)) };
-	PlayerData p_data;
+	PlayerData p_data[3];
 	BallData b_data;
 	KeeperData k_data;
 };
@@ -67,12 +67,13 @@ struct PacketGameover {
 // Client -> Server
 struct PacketInputkey {
 	PacketHeader header{ htons(PKT_INPUT_KEY), htons(sizeof(PacketInputkey) - sizeof(PacketHeader)) };
-	uint8_t key[256];
+	uint8_t k_type;
+	uint8_t k_toggle;
 };
-
 struct PacketInputspecialkey {
-	PacketHeader header{ htons(PKT_INPUT_SPECIALKEY), htons(sizeof(PacketInputspecialkey) - sizeof(PacketHeader)) };
-	uint8_t specialkey[256];
+	PacketHeader header{ htons(PKT_INPUT_SPECIALKEY), htons(sizeof(PacketInputkey) - sizeof(PacketHeader)) };
+	uint8_t k_type;
+	uint8_t k_toggle;
 };
 
 struct PacketLogin {
