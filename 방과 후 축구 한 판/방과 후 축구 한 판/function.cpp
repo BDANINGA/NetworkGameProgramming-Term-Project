@@ -474,8 +474,7 @@ void make_Light() {
 
 //
 void PlayerInput(int key_value, PacketInputkey& key, SOCKET sock, bool toggle) {
-    key.k_type = key_value;
-    key.k_toggle = toggle;
+    key.key[key_value] = toggle;
     int sent = send(sock, (char*)&key, sizeof(PacketInputkey), 0);
     if (sent == SOCKET_ERROR) {
         int err = WSAGetLastError();
@@ -483,8 +482,7 @@ void PlayerInput(int key_value, PacketInputkey& key, SOCKET sock, bool toggle) {
     }
 }
 void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock, bool toggle) {
-    key.k_type = key_value;
-    key.k_toggle = toggle;
+    key.key[key_value] = toggle;
     int sent = send(sock, (char*)&key, sizeof(PacketInputspecialkey), 0);
     if (sent == SOCKET_ERROR) {
         int err = WSAGetLastError();
