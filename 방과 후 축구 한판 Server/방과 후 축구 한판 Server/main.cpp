@@ -155,7 +155,7 @@ int main() {
     closesocket(listenSocket);
 
     // --- 메인 스레드 안에서 게임 루프 실행 ---
-    //GameSessionLoop(clientSockets);
+    GameSessionLoop(clientSockets);
 
     // --- 종료 처리 ---
     std::cout << "Game loop ended. GameOver..." << std::endl;
