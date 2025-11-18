@@ -3,10 +3,15 @@
 #include "Keeper.h"
 #include "Camera.h"
 #include "Light.h"
+#include "network.h"
+
+extern bool gameover;
 
 // ∑ª¥ı∏µ
 GLvoid drawScene();
+GLvoid gameoverScene();
 GLvoid Reshape(int w, int h);
+void UI_Update();
 
 // ¡∂¿€
 GLvoid Keyboard(unsigned char key, int x, int y);

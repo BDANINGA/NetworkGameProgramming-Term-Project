@@ -1,6 +1,5 @@
 //--- 메인 함수
 #include "방과후 축구한판_Client.h"
-#include "network.h"
 
 #define SERVERIP   "127.0.0.1"
 #define SERVERPORT 9000
@@ -68,7 +67,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 		return;
 	}
 
-	glutDisplayFunc(drawScene);
+	glutDisplayFunc(UI_Update);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
 	glutKeyboardUpFunc(KeyboardUp);

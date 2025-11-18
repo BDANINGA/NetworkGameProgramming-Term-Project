@@ -181,3 +181,11 @@ GLvoid SpecialKeysUp(int key, int x, int y) {
 	}
 	glutPostRedisplay();  // 화면 갱신
 }
+
+GLvoid gameoverScene() {
+
+};
+void UI_Update() {
+	if (gameover) gameoverScene();
+	else drawScene();
+}
