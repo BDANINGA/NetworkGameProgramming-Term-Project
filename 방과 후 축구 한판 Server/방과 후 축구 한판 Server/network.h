@@ -1,6 +1,11 @@
 #pragma once
 #include "Packet.h"
 
+#define MAX_PLAYERS 3
+
+extern PacketInputkey g_LatestInputKey[MAX_PLAYERS];
+extern PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];
+
 // --- 스레드에 넘겨줄 인수 ---
 struct ClientContext {
     SOCKET socket;

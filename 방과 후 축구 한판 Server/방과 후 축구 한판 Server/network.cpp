@@ -96,16 +96,14 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
 
             // 입력값 처리
         case PKT_INPUT_KEY: {
-            PacketInputkey input_key;
-            if (!RecvTCP(sock, (char*)&input_key + sizeof(PacketHeader), header.size)) {
+            if (!RecvTCP(sock, (char*)&g_LatestInputKey[playerID] + sizeof(PacketHeader), header.size)) {
                 std::cout << "error_recv: key" << std::endl;
                 break;
             }
             break;
         }
         case PKT_INPUT_SPECIALKEY: {
-            PacketInputspecialkey input_skey;
-            if (!RecvTCP(sock, (char*)&input_skey + sizeof(PacketHeader), header.size)) {
+            if (!RecvTCP(sock, (char*)&g_LatestInputSpecialKey[playerID] + sizeof(PacketHeader), header.size)) {
                 std::cout << "error_recv: skey" << std::endl;
                 break;
             }
