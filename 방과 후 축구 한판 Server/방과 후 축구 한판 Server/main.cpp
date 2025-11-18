@@ -25,7 +25,15 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     players[1].setPosition(3, 0, 5);
     players[2].setPosition(-3, 0, 5);
 
+    // 시작 시간 설정
     time_t startTime = time(NULL);
+
+    // 게임 스코어 초기화
+    uint16_t currentScore[3]{ 0,0,0 };
+
+    // 공의 마지막 터치 기억 (0번째 플레이어가 처음 공을 소유/터치했다고 시작)
+    uint8_t whichPlayerHasBall{ 0 };
+
 
     //PacketRenderData 준비
     PacketRenderData statePkt;
@@ -59,21 +67,24 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         // 입력값 적용
         for (int i = 0; i < MAX_PLAYERS; i++) {
             for (int k = 0; k < 256; k++) {
-                if (playerKeys[i].key[k]) players[i].keyDown(k);
-                else players[i].keyUp(k);
+                //if (playerKeys[i].key[k]) players[i].keyDown(k);
+                //else players[i].keyUp(k);
 
-                if (playerSpecialKeys[i].key[k]) players[i].keyDown(k);
-                else players[i].keyUp(k);
+                //if (playerSpecialKeys[i].specialkey[k]) players[i].keyDown(k);
+                //else players[i].keyUp(k);
             }
         }
 
         // 객체 Move() 호출
-        bool anyPlayerHasBall = false;
+        bool playerHasBall = false;
         for (int i = 0; i < MAX_PLAYERS; i++) {
             players[i].Move(ball, keeper.ishasBall());
-            if (players[i].ishasBall()) anyPlayerHasBall = true;
+            if (players[i].ishasBall()) {
+                playerHasBall = true;
+                whichPlayerHasBall = i;
+            }
         }
-        keeper.Move(ball.getPosition(), anyPlayerHasBall);
+        keeper.Move(ball.getPosition(), playerHasBall);
         ball.Move(keeper.getPosition(), keeper.ishasBall());
 
         // 충돌 및 골, 시간 종료 등
@@ -82,7 +93,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         }
 
 
-        // 데이터 보내기
+        // --- 데이터 채우기/보내기 ---
 
         // 3명의 플레이어 데이터 채우기
         for (int i = 0; i < MAX_PLAYERS; i++) {
@@ -98,9 +109,13 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         statePkt.k_data.position = keeper.getPosition();
         statePkt.k_data.rotation = keeper.getRotation();
 
-        // 헤더 갱신 (사이즈 일단은 전부로 했는데, 만약 필요시 PacketRenderData - header로 수정하면 아래 send도 한번에 보내기 때문에 수정해야 합니다.)
-        statePkt.header.type = htons(PKT_RENDER_DATA);
-        statePkt.header.size = htons(sizeof(PacketRenderData));
+        // 현재 스코어 데이터 채우기
+        for (int i = 0; i < 3; i++) {
+            statePkt.playerScore[i] = currentScore[i];
+        }
+
+        // 남은 시간 데이터 채우기
+        statePkt.remainingTime = 300 - (time(NULL) - startTime);
 
         // 모든 클라이언트에게 'send' 
         for (int i = 0; i < MAX_PLAYERS; i++) {
@@ -113,6 +128,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         Sleep(33);
     }
 }
+
 
 int main() {
 

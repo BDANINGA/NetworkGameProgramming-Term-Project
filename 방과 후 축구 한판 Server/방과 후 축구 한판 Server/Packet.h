@@ -57,6 +57,9 @@ struct PacketRenderData {
 	PlayerData p_data[3];
 	BallData b_data;
 	KeeperData k_data;
+
+	uint8_t playerScore[3];
+	time_t remainingTime;
 };
 
 struct PacketGameover {
