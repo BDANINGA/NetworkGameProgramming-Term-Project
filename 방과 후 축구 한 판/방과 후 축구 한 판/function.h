@@ -83,10 +83,6 @@ void viewTransform();
 void projectionTransform();
 void make_Light();
 
-// 조작
-void PlayerInput(int key_value, PacketInputkey& key, SOCKET sock, bool toggle);
-void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock, bool toggle);
-
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // 도형 만들기(사용안함)
 void MakeSphere(GLfloat arr[][3], GLfloat normal[][3], GLfloat cx, GLfloat cy, GLfloat cz, GLfloat radius, int first_index);

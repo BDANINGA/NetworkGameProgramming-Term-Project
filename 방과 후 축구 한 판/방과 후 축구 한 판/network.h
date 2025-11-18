@@ -10,17 +10,10 @@ void ProcessPacket(SOCKET socket, const PacketHeader& header, char* payload);
 // --- 클라이언트 네트워크 스레드 ---
 DWORD WINAPI ClientNetworkThread(LPVOID lpParam);
 
-
-
-
-
-
-
-
-
-
-
-
+// -----------------------------------------------------------------------------
+// 조작(send_input)
+void PlayerInput(int key_value, PacketInputkey& key, SOCKET sock, bool toggle);
+void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock, bool toggle);
 
 // recv_gameover() - 11.08
 void recv_gameover(SOCKET socket, PacketHeader header, bool* gameover);
