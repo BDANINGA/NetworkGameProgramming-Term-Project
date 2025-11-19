@@ -16,6 +16,8 @@ PacketInputkey input{};
 PacketInputspecialkey s_input{};
 
 extern SOCKET g_ServerSocket;
+extern int g_CurrentScores[3]{ 0,0,0 };
+extern int g_SecondsRemaining{ 300 };
 //------------------------------------------------------------------------
 bool start = true;
 bool left_button = 0;
@@ -50,6 +52,21 @@ GLvoid drawScene() {
 	// 카메라 설정: 플레이어를 따라가는 카메라 server로부터 받은 player position으로 받아서 설정
 	camera.setPosition(player.getPosition() + glm::vec3(0.0f, 1.0f, 5.0f));  // 플레이어 위치 기준으로 카메라 위치 설정 (위 2, 뒤 5)
 	camera.setDirection(player.getPosition());  // 카메라는 플레이어를 향하도록 설정
+
+	// 시간 sprintf
+	int minutes = g_SecondsRemaining / 60;
+	int seconds = g_SecondsRemaining % 60;
+	char timeString[32];
+	sprintf(timeString, "TIME %02d:%02d", minutes, seconds);
+
+	// 점수 sprintf
+	char scoreString[128];
+	sprintf(scoreString, "P1: %d  P2: %d  P3: %d",
+		g_CurrentScores[0], g_CurrentScores[1], g_CurrentScores[2]);
+
+	// 텍스트 그리기 
+	drawText(10, height - 30, timeString); // 좌측 상단
+	drawText(width - 250, height - 30, scoreString); // 우측 상단
 
 	viewTransform();
 	projectionTransform();
