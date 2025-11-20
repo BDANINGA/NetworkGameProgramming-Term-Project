@@ -9,12 +9,6 @@ void send_gameover(SOCKET& socket) {
         std::cerr << "error: send_gameover()" << std::endl;
 }
 
-void send_renderdata(SOCKET socket, PacketRenderData& renderdata) {
-    int sent1 = send(socket, (char*)&renderdata, sizeof(PacketRenderData), 0);
-    if (sent1 == sizeof(PacketHeader))
-        printf("error send_renderdata()");
-}
-
 // send_userdata - 11.19 ±¸Çö
 void send_userdata(SOCKET& socket, PacketUserData& userdata) {
     int sent = send(socket, (char*)&userdata, sizeof(PacketUserData), 0);
