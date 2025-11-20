@@ -32,80 +32,74 @@ bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t por
     return true;
 }
 
-// --- 수신된 패킷을 처리하는 함수 ---
-void ProcessPacket(SOCKET socket, const PacketHeader& header)
-{
-    uint16_t type = ntohs(header.type);
-
-    switch (type)
-    {
-    case PKT_RENDER_DATA:
-    {
-        recv_renderdata(socket, header, renderData);
-        for (int i = 0; i < MAX_PLAYERS; ++i) {
-            player[i].setPosition(renderData.p_data->position);
-            player[i].setRotation(renderData.p_data->rotation);
-        }
-        ball.setPosition(renderData.b_data.position);
-        ball.setRotation(renderData.b_data.rotation);
-        ball.setRotationAngle(renderData.b_data.rotationAngle);
-        keeper.setPosition(renderData.k_data.position);
-        keeper.setRotation(renderData.k_data.rotation);
-
-        std::cout << renderData.p_data->position.x << std::endl;
-        break;
-    }
-    case PKT_LOGIN_RESULT:
-    {
-        
-        break;
-    }
-    case PKT_GAMEOVER:                                 
-    {
-        recv_gameover(socket, header, gameover);
-        break;
-    }
-    default:
-        std::cout << "Unknown packet type: " << type << std::endl;
-        break;
-    }
-}
-
 // --- 클라이언트 네트워크 스레드 ---
 DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 {
     SOCKET sock = (SOCKET)lpParam;
+    PacketHeader header;
     while (true)
     {
-        // =====================
-        // (1) 패킷 수신
-        // =====================
-        PacketHeader header{};
-        int bytesReceived = 0;
-        int totalReceived = 0;
-
-        // --- 헤더(4바이트) 수신 ---
-        int received = recv(sock, (char*)&header, sizeof(PacketHeader), 0);
-        if (received == SOCKET_ERROR)
-            std::cout << "error: recv_header" << std::endl;
-
-       /* while (totalReceived < sizeof(PacketHeader))
-        {
-            bytesReceived = recv(sock, ((char*)&header) + totalReceived,
-                sizeof(PacketHeader) - totalReceived, 0);
-            if (bytesReceived <= 0)
-            {
-                std::cerr << "error: recv_header" << std::endl;
-            }
-            totalReceived += bytesReceived;
-        }*/
-
+        // 헤더 수신
+        if (!RecvTCP(sock, (char*)&header, sizeof(PacketHeader))) {
+            break;
+        }
+        // 패킷 정보 변환 
+        header.size = ntohs(header.size);
+        header.type = ntohs(header.type);
         // =====================
         // (2) 패킷 처리
         // =====================
-        ProcessPacket(sock, header);
+        switch (header.type)
+        {
+        case PKT_RENDER_DATA:
+        {
+            if (!RecvTCP(sock, (char*)&renderData + sizeof(PacketHeader), header.size)) {
+                std::cout << "error_recv: renderdata" << std::endl;
+                break;
+            }
+            for (int i = 0; i < MAX_PLAYERS; ++i) {
+                player[i].setPosition(renderData.p_data->position);
+                player[i].setRotation(renderData.p_data->rotation);
+            }
+            ball.setPosition(renderData.b_data.position);
+            ball.setRotation(renderData.b_data.rotation);
+            ball.setRotationAngle(renderData.b_data.rotationAngle);
+            keeper.setPosition(renderData.k_data.position);
+            keeper.setRotation(renderData.k_data.rotation);
+            break;
+        }
+        case PKT_LOGIN_RESULT:
+        {
+
+            break;
+        }
+        case PKT_GAMEOVER:
+        {
+            if (!RecvTCP(sock, (char*)&gameover + sizeof(PacketHeader), header.size)) {
+                std::cout << "error_recv: gameover" << std::endl;
+                break;
+            }
+            break;
+        }
+        default:
+            std::cout << "Unknown packet type: " << header.type << std::endl;
+            break;
+        }
     }
 
     closesocket(sock);
     return 0;
+}
+
+bool RecvTCP(SOCKET sock, char* buffer, int size) {
+    int bytesRead = 0;
+    while (bytesRead < size) {
+        int result = recv(sock, buffer + bytesRead, size - bytesRead, 0);
+        if (result == SOCKET_ERROR || result == 0) {
+            std::cerr << "Client disconnected (ID: " << (int)sock << ")" << std::endl;
+            return false;
+        }
+        bytesRead += result;
+    }
+    return true;
 }
