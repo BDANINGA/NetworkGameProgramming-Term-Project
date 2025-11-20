@@ -5,7 +5,7 @@
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port);
 
 // --- 수신된 패킷을 처리하는 함수 ---
-void ProcessPacket(SOCKET socket, const PacketHeader& header, char* payload);
+void ProcessPacket(SOCKET socket, const PacketHeader& header);
 
 // --- 클라이언트 네트워크 스레드 ---
 DWORD WINAPI ClientNetworkThread(LPVOID lpParam);

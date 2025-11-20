@@ -1,7 +1,11 @@
 #include "network.h"
+#include "Keeper.h"
 
 extern bool gameover;
 extern PacketRenderData renderData;
+extern Player player[3];
+extern Ball ball;
+extern Keeper keeper;
 
 // --- connectÇÔ¼ö ---
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port)
@@ -38,7 +42,15 @@ void ProcessPacket(SOCKET socket, const PacketHeader& header)
     case PKT_RENDER_DATA:
     {
         recv_renderdata(socket, header, &renderData);
-
+        for (int i = 0; i < 3; ++i) {
+            player[i].setPosition(renderData.p_data->position);
+            player[i].setRotation(renderData.p_data->rotation);
+        }
+        ball.setPosition(renderData.b_data.position);
+        ball.setRotation(renderData.b_data.rotation);
+        ball.setRotationAngle(renderData.b_data.rotationAngle);
+        keeper.setPosition(renderData.k_data.position);
+        keeper.setRotation(renderData.k_data.rotation);
         break;
     }
     case PKT_LOGIN_RESULT:
