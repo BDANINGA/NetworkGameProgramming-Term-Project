@@ -83,6 +83,9 @@ void viewTransform();
 void projectionTransform();
 void make_Light();
 
+// 인게임 UI 생성
+void drawText(float x, float y, const char* text);
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // 도형 만들기(사용안함)
 void MakeSphere(GLfloat arr[][3], GLfloat normal[][3], GLfloat cx, GLfloat cy, GLfloat cz, GLfloat radius, int first_index);
