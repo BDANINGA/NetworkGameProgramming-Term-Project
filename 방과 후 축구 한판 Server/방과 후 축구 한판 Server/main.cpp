@@ -67,11 +67,11 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         // 입력값 적용
         for (int i = 0; i < MAX_PLAYERS; i++) {
             for (int k = 0; k < 256; k++) {
-                //if (playerKeys[i].key[k]) players[i].keyDown(k);
-                //else players[i].keyUp(k);
+                if (playerKeys[i].key[k]) players[i].keyDown(k);
+                else players[i].keyUp(k);
 
-                //if (playerSpecialKeys[i].specialkey[k]) players[i].keyDown(k);
-                //else players[i].keyUp(k);
+                if (playerSpecialKeys[i].key[k]) players[i].keyDown(k);
+                else players[i].keyUp(k);
             }
         }
 
