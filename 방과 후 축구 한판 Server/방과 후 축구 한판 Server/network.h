@@ -35,4 +35,7 @@ bool RecvTCP(SOCKET sock, char* buffer, int size);
 
 
 // send_gameover - 11.8일 구현
-void send_gameover(SOCKET socket);
+void send_gameover(SOCKET& socket);
+
+// send_userdata - 11.19 구현
+void send_userdata(SOCKET& socket, PacketUserData& userdata);
