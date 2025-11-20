@@ -1,6 +1,7 @@
 #include "network.h"
 
 extern bool gameover;
+extern PacketRenderData renderData;
 
 // --- connectÇÔ¼ö ---
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port)
@@ -36,7 +37,6 @@ void ProcessPacket(SOCKET socket, const PacketHeader& header)
     {
     case PKT_RENDER_DATA:
     {
-        PacketRenderData renderData;
         recv_renderdata(socket, header, &renderData);
 
         break;

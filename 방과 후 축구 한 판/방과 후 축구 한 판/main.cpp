@@ -7,9 +7,9 @@
 // --- 네트워크 통신용 전역 변수 ---
 SOCKET g_ServerSocket{};
 
-
 // --- recv 용도 ---
 bool gameover{};
+PacketRenderData renderData;
 
 //--- 필요한 변수 선언
 GLint width, height;

@@ -7,7 +7,8 @@
 //------------------------------------------------------------------------------------------------------
 Player player;
 Ball ball;
-Keeper keeper(0.0f, 0.0f, -32.0f);
+Keeper keeper;
+
 
 Camera camera;
 Light light;
@@ -16,6 +17,7 @@ PacketInputkey input{};
 PacketInputspecialkey s_input{};
 
 extern SOCKET g_ServerSocket;
+extern PacketRenderData renderData;
 extern int g_CurrentScores[3]{ 0,0,0 };
 extern int g_SecondsRemaining{ 300 };
 //------------------------------------------------------------------------
