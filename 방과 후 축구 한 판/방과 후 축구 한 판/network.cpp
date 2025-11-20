@@ -51,6 +51,8 @@ void ProcessPacket(SOCKET socket, const PacketHeader& header)
         ball.setRotationAngle(renderData.b_data.rotationAngle);
         keeper.setPosition(renderData.k_data.position);
         keeper.setRotation(renderData.k_data.rotation);
+
+        std::cout << renderData.p_data->position.x << std::endl;
         break;
     }
     case PKT_LOGIN_RESULT:
