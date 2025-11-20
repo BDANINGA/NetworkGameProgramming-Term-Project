@@ -21,6 +21,7 @@ public:
 
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
 	void setRotation(glm::vec3 rotation);
+	void setRotationAngle(float rotationAngle);
 	void setVelocity(glm::vec3 velocity);
 	void setDirection(glm::vec3 direction);
 	void setAcceleration(float acceleration);

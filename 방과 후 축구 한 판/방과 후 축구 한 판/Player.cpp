@@ -16,6 +16,9 @@ void Player::setPosition(GLfloat x, GLfloat y, GLfloat z) {
 	this->position.y = y;
 	this->position.z = z;
 };
+void Player::setRotation(glm::vec3 rotation) {
+	this->rotation = rotation;
+};
 
 void Player::Move(Ball& ball, bool keeper_has_ball) {
 	glm::vec3 distanceVec{};

@@ -13,6 +13,7 @@ public:
 	glm::vec3 getRotation();
 
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
+	void setRotation(glm::vec3 rotation);
 
 	void Move(Ball& ball, bool keeper_has_ball);
 	void Draw(Ball& ball, bool keeper_has_ball, GLuint vao_player);

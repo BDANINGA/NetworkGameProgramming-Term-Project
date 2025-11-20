@@ -11,6 +11,13 @@ Keeper::~Keeper() = default;
 glm::vec3 Keeper::getPosition() { return this->position; };
 glm::vec3 Keeper::getRotation() { return this->rotation; };
 
+void Keeper::setPosition(glm::vec3 position) {
+	this->position = position;
+};
+void Keeper::setRotation(glm::vec3 rotation) {
+	this->rotation = rotation;
+};
+
 void Keeper::Move(glm::vec3 ballPos, bool has_ball) {
 	// 골키퍼의 이동 범위 설정
 	this->targetX = ballPos.x;

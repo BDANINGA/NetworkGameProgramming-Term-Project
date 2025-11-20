@@ -27,6 +27,9 @@ void Ball::setPosition(GLfloat x, GLfloat y, GLfloat z) {
 void Ball::setRotation(glm::vec3 rotation) {
 	this->rotation = rotation;
 };
+void Ball::setRotationAngle(float rotationAngle) {
+	this->rotationAngle = rotationAngle;
+}
 void Ball::setVelocity(glm::vec3 velocity) {
 	this->velocity = velocity;
 };
