@@ -16,7 +16,7 @@ public:
 	void setRotation(glm::vec3 rotation);
 
 	void Move(glm::vec3 ballPos, bool has_ball);
-	void Draw(glm::vec3 ballPos, bool has_ball, GLuint vao_player);
+	void Draw(GLuint vao_player);
 
 	void hasBall();
 	void NothasBall();

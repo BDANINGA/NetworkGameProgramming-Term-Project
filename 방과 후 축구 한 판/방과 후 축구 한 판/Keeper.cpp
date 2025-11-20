@@ -41,7 +41,7 @@ void Keeper::Move(glm::vec3 ballPos, bool has_ball) {
 	if (ballPos.z - this->position.z <= 5)
 		this->position.y = glm::mix(this->position.y, this->targetY, this->velocity);
 };
-void Keeper::Draw(glm::vec3 ballPos, bool has_ball, GLuint vao_player) {
+void Keeper::Draw(GLuint vao_player) {
 	glBindVertexArray(vao_player); //--- VAO를 바인드하기
 
 	// move를 하지않고 Server로부터 recv로 position을 받는다.

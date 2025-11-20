@@ -19,7 +19,7 @@ public:
 	glm::vec3 getDirection();
 	float getAcceleration();
 
-	void setPosition(GLfloat x, GLfloat y, GLfloat z);
+	void setPosition(glm::vec3 position);
 	void setRotation(glm::vec3 rotation);
 	void setRotationAngle(float rotationAngle);
 	void setVelocity(glm::vec3 velocity);
@@ -27,7 +27,7 @@ public:
 	void setAcceleration(float acceleration);
 
 	void Move(glm::vec3 keeperPos, bool keeper_has_ball);
-	void Draw(glm::vec3 keeperPos, bool keeper_has_ball, GLuint vao_ball);
+	void Draw(GLuint vao_ball);
 
 	void changeCurve();
 	void changeStrong();
