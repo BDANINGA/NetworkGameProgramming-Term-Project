@@ -54,7 +54,6 @@ GLvoid drawScene() {
 	viewTransform();
 	projectionTransform();
 	make_Light();
-
 	glutSwapBuffers(); // 화면에 출력하기
 }
 GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
@@ -183,7 +182,26 @@ GLvoid SpecialKeysUp(int key, int x, int y) {
 }
 
 GLvoid gameoverScene() {
+	//--- 변경된 배경색 설정
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glUseProgram(shaderProgramID);
+	glEnable(GL_DEPTH_TEST);   // 깊이 테스트 활성화
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	drawGoal(vao_goalpost);
+	drawBackground();
+
+	// 카메라 설정: 플레이어를 따라가는 카메라 server로부터 받은 player position으로 받아서 설정
+	camera.setPosition(glm::vec3(0.0f, 1.0f, 5.0f));  // 플레이어 위치 기준으로 카메라 위치 설정 (위 2, 뒤 5)
+	camera.setDirection(glm::vec3(0.0f, 0.0f, 0.0f));  // 카메라는 플레이어를 향하도록 설정
+
+	viewTransform();
+	projectionTransform();
+	make_Light();
+
+	glutSwapBuffers(); // 화면에 출력하기
 };
 void UI_Update() {
 	if (gameover) gameoverScene();
