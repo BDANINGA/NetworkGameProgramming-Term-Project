@@ -3,6 +3,9 @@
 
 #define MAX_PLAYERS 1
 
+extern int g_CurrentScores[3];
+extern int g_SecondsRemaining;
+
 // --- connectÇÔ¼ö ---
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port);
 

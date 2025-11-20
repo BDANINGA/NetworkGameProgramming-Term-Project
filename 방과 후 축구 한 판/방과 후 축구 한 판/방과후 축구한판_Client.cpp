@@ -17,8 +17,8 @@ PacketInputspecialkey s_input{};
 PacketRenderData renderData;
 
 extern SOCKET g_ServerSocket;
-extern int g_CurrentScores[3]{ 0,0,0 };
-extern int g_SecondsRemaining{ 300 };
+int g_CurrentScores[3]{ 0,0,0 };
+int g_SecondsRemaining{ 300 };
 //------------------------------------------------------------------------
 bool start = true;
 bool left_button = 0;

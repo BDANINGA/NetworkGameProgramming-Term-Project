@@ -66,6 +66,12 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
             ball.setRotationAngle(renderData.b_data.rotationAngle);
             keeper.setPosition(renderData.k_data.position);
             keeper.setRotation(renderData.k_data.rotation);
+
+            for (int i = 0; i < MAX_PLAYERS; ++i) {
+                g_CurrentScores[i] = renderData.playerScore[i];
+            }
+            g_SecondsRemaining = renderData.remainingTime;
+
             break;
         }
         case PKT_LOGIN_RESULT:
