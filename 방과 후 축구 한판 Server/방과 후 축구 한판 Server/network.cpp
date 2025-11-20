@@ -17,6 +17,10 @@ bool ListenForClients(ClientContext& context, uint16_t port) {
         return false;
     }
 
+    DWORD optval = 1;
+    int retval = setsockopt(context.socket, SOL_SOCKET, SO_REUSEADDR, (const char*)&optval, sizeof(optval));
+    if (retval == SOCKET_ERROR) std::cerr << "Socket Option Error" << std::endl;
+
     // bind()
     struct sockaddr_in serveraddr;
     memset(&serveraddr, 0, sizeof(serveraddr));
