@@ -84,18 +84,22 @@ void Keyboard(unsigned char key, int x, int y) {
 	case 'd':
 	case 'D':
 		PlayerInput('d', input, g_ServerSocket, true);
+		std::cout << "키 입력" << std::endl;
 		break;
 	case 'e':
 	case 'E':
 		PlayerInput('e', input, g_ServerSocket, true);
+		std::cout << "키 입력" << std::endl;
 		break;
 	case 'z':
 	case 'Z':
 		PlayerInput('z', input, g_ServerSocket, true);
+		std::cout << "키 입력" << std::endl;
 		break;
 	case 'c':
 	case 'C':
 		PlayerInput('c', input, g_ServerSocket, true);
+		std::cout << "키 입력" << std::endl;
 		break;
 	case 'q':
 		// debug: game_quit
@@ -109,22 +113,18 @@ void KeyboardUp(unsigned char key, int x, int y) {
 	case 'd':
 	case 'D':
 		PlayerInput('d', input, g_ServerSocket, false);
-		//player.Shoot(ball);
 		break;
 	case 'e':
 	case 'E':
 		PlayerInput('e', input, g_ServerSocket, false);
-		//player.Walk();
 		break;
 	case 'z':
 	case 'Z':
 		PlayerInput('z', input, g_ServerSocket, false);
-		//player.changeCurve(player.isCurve());
 		break;
 	case 'c':
 	case 'C':
 		PlayerInput('c', input, g_ServerSocket, false);
-		//player.changeStrong(player.isStrong());
 		break;
 	}
 	glutPostRedisplay();

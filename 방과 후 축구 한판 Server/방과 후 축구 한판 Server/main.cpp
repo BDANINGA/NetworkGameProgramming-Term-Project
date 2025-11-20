@@ -118,11 +118,10 @@ void GameSessionLoop(SOCKET clientSockets[]) {
 
         // 모든 클라이언트에게 'send' 
         for (int i = 0; i < MAX_PLAYERS; i++) {
-            if (send(clientSockets[i], (char*)&statePkt, sizeof(statePkt), 0) == SOCKET_ERROR) {
+            if (send(clientSockets[i], (char*)&statePkt, sizeof(PacketRenderData), 0) == SOCKET_ERROR) {
                 std::cerr << "Send failed to player " << i << std::endl;
             }
         }
-
         // 30 FPS
         Sleep(33);
     }

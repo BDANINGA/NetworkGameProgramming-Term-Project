@@ -87,17 +87,8 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
         header.size = ntohs(header.size);
         header.type = ntohs(header.type);
 
-        // 실제 데이터 크기 오류 체크
-        int payloadSize = header.size;
-        if (payloadSize < 0 || payloadSize >(1024 - sizeof(PacketHeader))) {
-            std::cerr << "잘못된 패킷 사이즈 " << playerID << std::endl;
-            continue;
-        }
-
-        std::cout << header.type << std::endl;
         // 패킷 타입에 따라 분기
         switch (header.type) {
-
             // 입력값 처리
         case PKT_INPUT_KEY: {
             if (!RecvTCP(sock, (char*)&g_LatestInputKey[playerID] + sizeof(PacketHeader), header.size)) {

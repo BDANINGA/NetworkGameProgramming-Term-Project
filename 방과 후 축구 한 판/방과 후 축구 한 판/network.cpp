@@ -75,29 +75,30 @@ void ProcessPacket(SOCKET socket, const PacketHeader& header)
 DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 {
     SOCKET sock = (SOCKET)lpParam;
-
     while (true)
     {
         // =====================
         // (1) 패킷 수신
         // =====================
-        PacketHeader header;
+        PacketHeader header{};
         int bytesReceived = 0;
         int totalReceived = 0;
 
         // --- 헤더(4바이트) 수신 ---
-        while (totalReceived < sizeof(PacketHeader))
+        int received = recv(sock, (char*)&header, sizeof(PacketHeader), 0);
+        if (received == SOCKET_ERROR)
+            std::cout << "error: recv_header" << std::endl;
+
+       /* while (totalReceived < sizeof(PacketHeader))
         {
             bytesReceived = recv(sock, ((char*)&header) + totalReceived,
                 sizeof(PacketHeader) - totalReceived, 0);
             if (bytesReceived <= 0)
             {
-                std::cerr << "서버 연결 종료" << std::endl;
-                closesocket(sock);
-                return 0;
+                std::cerr << "error: recv_header" << std::endl;
             }
             totalReceived += bytesReceived;
-        }
+        }*/
 
         // =====================
         // (2) 패킷 처리

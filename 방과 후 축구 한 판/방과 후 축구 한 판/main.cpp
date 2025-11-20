@@ -65,9 +65,11 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 		std::cout << "faild to ConnectToServer" << std::endl;
 		return;
 	}
-	CreateThread(NULL, 0, ClientNetworkThread, 0, 0, NULL);
-
-
+	if (!CreateThread(NULL, 0, ClientNetworkThread, (LPVOID)g_ServerSocket, 0, NULL)) {
+		std::cout << "faild to CreateThread: ClientNetworkThread" << std::endl;
+		return;
+	}
+	
 	glutDisplayFunc(UI_Update);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
