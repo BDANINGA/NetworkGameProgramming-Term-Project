@@ -28,7 +28,7 @@ bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t por
 }
 
 // --- 수신된 패킷을 처리하는 함수 ---
-void ProcessPacket(SOCKET socket, const PacketHeader& header, char* payload)
+void ProcessPacket(SOCKET socket, const PacketHeader& header)
 {
     uint16_t type = ntohs(header.type);
 
@@ -36,19 +36,17 @@ void ProcessPacket(SOCKET socket, const PacketHeader& header, char* payload)
     {
     case PKT_RENDER_DATA:
     {
-        /* memcpy(&g_LatestRenderData, &header, sizeof(PacketHeader));
-         memcpy(((char*)&g_LatestRenderData) + sizeof(PacketHeader),
-             payload, sizeof(PacketRenderData) - sizeof(PacketHeader));*/
+        PacketRenderData renderData;
+        recv_renderdata(socket, header, &renderData);
+
         break;
     }
     case PKT_LOGIN_RESULT:
     {
-        /*memcpy(&g_LatestLoginResult, &header, sizeof(PacketHeader));
-        memcpy(((char*)&g_LatestLoginResult) + sizeof(PacketHeader),
-            payload, sizeof(PacketLoginResult) - sizeof(PacketHeader));*/
+        
         break;
     }
-    case PKT_GAMEOVER:                                  // 이런 식으로 처리?
+    case PKT_GAMEOVER:                                 
     {
         recv_gameover(socket, header, &gameover);
         break;
@@ -66,20 +64,8 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 
     while (true)
     {
-        //// =====================
-        //// (1) 클라이언트 입력 전송
-        //// =====================
-        //PacketInputkey keyPkt;
-        //PacketInputspecialkey specialPkt;
-
-        //memcpy(keyPkt.key, g_currentKey, sizeof(g_currentKey));
-        //memcpy(specialPkt.specialkey, g_currentSpecialKey, sizeof(g_currentSpecialKey));
-
-        //send(sock, (char*)&keyPkt, sizeof(keyPkt), 0);
-        //send(sock, (char*)&specialPkt, sizeof(specialPkt), 0);
-
         // =====================
-        // (2) 패킷 수신
+        // (1) 패킷 수신
         // =====================
         PacketHeader header;
         int bytesReceived = 0;
@@ -99,29 +85,10 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
             totalReceived += bytesReceived;
         }
 
-        uint16_t packetSize = ntohs(header.size);
-        int payloadSize = packetSize - sizeof(PacketHeader);
-
-        // --- 페이로드 수신 ---
-        char payloadBuffer[2048];
-        totalReceived = 0;
-        while (totalReceived < payloadSize)
-        {
-            bytesReceived = recv(sock, payloadBuffer + totalReceived,
-                payloadSize - totalReceived, 0);
-            if (bytesReceived <= 0)
-            {
-                std::cerr << "서버 연결 종료" << std::endl;
-                closesocket(sock);
-                return 0;
-            }
-            totalReceived += bytesReceived;
-        }
-
         // =====================
-        // (3) 패킷 처리
+        // (2) 패킷 처리
         // =====================
-        ProcessPacket(sock, header, payloadBuffer);
+        ProcessPacket(sock, header);
     }
 
     closesocket(sock);

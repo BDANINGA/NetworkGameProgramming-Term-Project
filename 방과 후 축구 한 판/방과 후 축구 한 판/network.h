@@ -17,3 +17,4 @@ void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock,
 
 // recv_gameover() - 11.08
 void recv_gameover(SOCKET socket, PacketHeader header, bool* gameover);
+void recv_renderdata(SOCKET socket, PacketHeader header, PacketRenderData* renderData);
