@@ -5,10 +5,9 @@
 #include "방과후 축구한판_Client.h"
 
 //------------------------------------------------------------------------------------------------------
-Player player[3];
+Player player[MAX_PLAYERS];
 Ball ball;
 Keeper keeper;
-
 
 Camera camera;
 Light light;
@@ -41,7 +40,7 @@ GLvoid drawScene() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	ball.Draw(vao_ball);						// server로부터 position, rotationAngle, rotation을 받으면 된다.
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < MAX_PLAYERS; ++i) {
 		player[i].Draw(vao_player);									// server로부터 position, rotation을 받으면 된다.
 		keeper.Draw(vao_player);					// server로부터 position을 받으면 된다.
 	}

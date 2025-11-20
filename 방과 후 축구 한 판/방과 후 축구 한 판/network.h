@@ -1,6 +1,8 @@
 #pragma once
 #include "Packet.h"
 
+#define MAX_PLAYERS 1
+
 // --- connectÇÔ¼ö ---
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port);
 
@@ -16,5 +18,5 @@ void PlayerInput(int key_value, PacketInputkey& key, SOCKET sock, bool toggle);
 void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock, bool toggle);
 
 // recv_gameover() - 11.08
-void recv_gameover(SOCKET socket, PacketHeader header, bool* gameover);
-void recv_renderdata(SOCKET socket, PacketHeader header, PacketRenderData* renderData);
+void recv_gameover(SOCKET socket, PacketHeader header, bool& gameover);
+void recv_renderdata(SOCKET socket, PacketHeader header, PacketRenderData& renderData);

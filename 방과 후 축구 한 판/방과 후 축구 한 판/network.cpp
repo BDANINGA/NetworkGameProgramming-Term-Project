@@ -41,8 +41,8 @@ void ProcessPacket(SOCKET socket, const PacketHeader& header)
     {
     case PKT_RENDER_DATA:
     {
-        recv_renderdata(socket, header, &renderData);
-        for (int i = 0; i < 3; ++i) {
+        recv_renderdata(socket, header, renderData);
+        for (int i = 0; i < MAX_PLAYERS; ++i) {
             player[i].setPosition(renderData.p_data->position);
             player[i].setRotation(renderData.p_data->rotation);
         }
@@ -60,7 +60,7 @@ void ProcessPacket(SOCKET socket, const PacketHeader& header)
     }
     case PKT_GAMEOVER:                                 
     {
-        recv_gameover(socket, header, &gameover);
+        recv_gameover(socket, header, gameover);
         break;
     }
     default:

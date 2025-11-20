@@ -3,7 +3,6 @@
 #include "Player.h"           
 #include "Keeper.h"     
 
-#define MAX_PLAYERS 3
 #define PORT 9000
 
 // --- 사용할 전역 변수 ---
@@ -21,9 +20,9 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     Keeper keeper(0, 0, -32);
 
     // 플레이어 초기 위치 설정 - (수정 필요)
-    players[0].setPosition(0, 0, 5);
+    /*players[0].setPosition(0, 0, 5);
     players[1].setPosition(3, 0, 5);
-    players[2].setPosition(-3, 0, 5);
+    players[2].setPosition(-3, 0, 5);*/
 
     // 시작 시간 설정
     time_t startTime = time(NULL);
@@ -43,7 +42,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     // --- 메인 루프 시작 ---
     while (true) {
 
-
+        InitializeCriticalSection(&g_InputLock);
         // Lock을 걸고 연산 시작 
         EnterCriticalSection(&g_InputLock);
 
