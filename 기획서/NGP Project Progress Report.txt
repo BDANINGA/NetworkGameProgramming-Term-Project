@@ -61,3 +61,7 @@ reuseaddr 소켓 옵션 개발일정에 추가
 2차토의 때 ReturntoLogin 개발 일정에 추가
 2차토의 때 클라이언트에서 쓰레드 순서제어
 2차토의 때 네이글 알고리즘 추가 논의
+
+11.18
+send_score는 필요했지만 renderdata부분에서 스코어도 넘겨주는 걸로 해결.
+파일에서 받아오는 userdata와 서버에서 넘겨주는 userdata를 위해 Update_userdata + send_userdata를 구현해야함.
