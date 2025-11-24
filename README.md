@@ -25,10 +25,10 @@
 |(3) connect(), listening(), accept() |   |(1) Gameover()|(3) ClientReveiveThread(), ServerReceiveThread()|(2) ProcessClient(), ProcessServer() |   |(1) send_gameover(), recv_gameover()|
 | 9: P | 10 | 11: P | 12: P | 13 | 14: P | 15: P |
 |(3) recv_input(), send_renderdata()|   |(2) MainThread()|(1) Tackle()| |(2) GameSessionLoop() (3) UI Update()|1차토의 |
-| 16: P | 17 | 18 | 19 | 20 | 21 | 22 |
-|(1) test환경 구축|(2) ProcessGameStateUpdate()|(1) GameoverUI()|(1) send_score() (2) LoadGameSceneUI(), Reusdaddr 소켓 옵션| |(2) UpdateInGameUI|(1) Update Score(), PlayerChat()|
+| 16: P | 17: P | 18: P | 19: P | 20 | 21: P | 22 |
+|(1) test환경 구축|(2) ProcessGameStateUpdate()|(1) GameoverUI()|(1) send_userdata() (2) LoadGameSceneUI(), Reusdaddr 소켓 옵션| |(2) UpdateInGameUI||
 | 23 | 24 | 25 | 26 | 27 | 28 | 29 |
-|(3) send_IDPW(), recv_IDPW(), send_login(), recv_login()|(2) ValidateLogin()|    |(1) send_chat() (2) LoadLoginScene()| |(1) BroadcastChat() (2) RegisterUser()| 2차토의  |
+|||    |(1) send_chat(), (1) Update_userdata(), PlayerChat() (2) LoadLoginScene() |(3) send_IDPW(), recv_IDPW(), send_login(), recv_login() |(1) BroadcastChat() (2) RegisterUser()| 2차토의  |
 | 30 |  
 | (1) ChatUI() (3) send_ready(), recv_ready(), 2ready?  |
 ---
