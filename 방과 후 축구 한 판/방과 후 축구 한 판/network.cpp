@@ -2,11 +2,15 @@
 #include "Keeper.h"
 
 extern bool gameover;
-extern bool loginResult;
 extern PacketRenderData renderData;
 extern Player player[3];
 extern Ball ball;
 extern Keeper keeper;
+
+int g_MyPlayerID = 0;
+
+bool loginResult;
+
 
 // --- connectÇÔ¼ö ---
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port)
@@ -77,10 +81,20 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
         }
         case PKT_LOGIN_RESULT:
         {
-            if (!RecvTCP(sock, (char*)&loginResult + sizeof(PacketHeader), header.size)) {
+            PacketLoginResult resPkt;
+
+            if (!RecvTCP(sock, (char*)&resPkt + sizeof(PacketHeader), header.size)) {
                 std::cout << "error_recv: loginresult" << std::endl;
                 break;
 			}
+
+            loginResult = resPkt.success;
+
+            if (loginResult) {
+                g_MyPlayerID = resPkt.myPlayerID;
+            }
+            std::cout << "Player " << g_MyPlayerID << " Login Success" << std::endl;
+
             break;
         }
         case PKT_GAMEOVER:

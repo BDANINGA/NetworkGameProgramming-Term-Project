@@ -23,3 +23,7 @@ void recv_gameover(SOCKET socket, PacketHeader& header, bool& gameover);
 void recv_renderdata(SOCKET socket, PacketHeader& header, PacketRenderData& renderData);
 
 bool RecvTCP(SOCKET sock, char* buffer, int size);
+
+void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw);
+
+void PlayerReady(PacketGameReady& readydata, SOCKET sock, bool ready);
