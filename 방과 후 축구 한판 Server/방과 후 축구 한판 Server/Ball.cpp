@@ -15,6 +15,7 @@ glm::vec3 Ball::getPosition() { return this->position; };
 glm::vec3 Ball::getRotation() { return this->rotation; };
 glm::vec3 Ball::getVelocity() { return this->velocity; };
 glm::vec3 Ball::getDirection() { return this->direction; };
+float Ball::getRotationAngle() { return this->rotationAngle; };
 float Ball::getAcceleration() { return this->acceleration; };
 
 void Ball::setPosition(GLfloat x, GLfloat y, GLfloat z) {

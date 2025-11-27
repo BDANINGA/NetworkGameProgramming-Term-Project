@@ -17,6 +17,7 @@ public:
 	glm::vec3 getRotation();
 	glm::vec3 getVelocity();
 	glm::vec3 getDirection();
+	float getRotationAngle();
 	float getAcceleration();
 
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
