@@ -133,7 +133,6 @@
     <ClCompile Include="network.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="recv.cpp" />
     <ClCompile Include="send.cpp" />
   </ItemGroup>
   <ItemGroup>

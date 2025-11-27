@@ -57,9 +57,6 @@
     <ClCompile Include="send.cpp">
       <Filter>소스 파일\NetWork</Filter>
     </ClCompile>
-    <ClCompile Include="recv.cpp">
-      <Filter>소스 파일\NetWork</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="function.h">
