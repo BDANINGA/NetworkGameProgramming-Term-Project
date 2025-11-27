@@ -19,3 +19,18 @@ void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock,
         std::cout << "Å° ÀÔ·Â: " << key_value << std::endl;
     }
 }
+
+void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw) {
+	strcpy_s(logindata.userID, id);
+	strcpy_s(logindata.userPW, pw);
+    int sent = send(sock, (char*)&logindata, sizeof(PacketInputkey), 0);
+    if (sent == SOCKET_ERROR)
+        std::cerr << "error: PlayerLogin()" << std::endl;
+}
+
+void PlayerReady(PacketGameReady& readydata, SOCKET sock, bool ready) {
+	readydata.ready = ready;
+    int sent = send(sock, (char*)&readydata, sizeof(PacketGameReady), 0);
+    if (sent == SOCKET_ERROR)
+        std::cerr << "error: PlayerReady()" << std::endl;
+}

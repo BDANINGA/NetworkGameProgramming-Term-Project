@@ -2,6 +2,7 @@
 #include "Keeper.h"
 
 extern bool gameover;
+extern bool loginResult;
 extern PacketRenderData renderData;
 extern Player player[3];
 extern Ball ball;
@@ -76,7 +77,10 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
         }
         case PKT_LOGIN_RESULT:
         {
-
+            if (!RecvTCP(sock, (char*)&loginResult + sizeof(PacketHeader), header.size)) {
+                std::cout << "error_recv: loginresult" << std::endl;
+                break;
+			}
             break;
         }
         case PKT_GAMEOVER:

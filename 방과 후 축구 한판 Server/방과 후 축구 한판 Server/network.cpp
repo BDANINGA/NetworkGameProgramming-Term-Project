@@ -105,12 +105,21 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
             break;
         }     
         case PKT_LOGIN: {
+			PacketLogin PlayerLogin;
+            if (!RecvTCP(sock, (char*)&PlayerLogin + sizeof(PacketHeader), header.size)) {
+                std::cout << "error_recv: login" << std::endl;
+                break;
+			}
             // Login 처리
             break;
         }
 
                       // 3명의 플레이어가 들어왔는지 확인
         case PKT_GAME_READY: {
+			PacketGameReady GameReady;
+            if (!RecvTCP(sock, (char*)&GameReady + sizeof(PacketHeader), header.size)) {
+                std::cout << "error_recv: gameready" << std::endl;
+				break;
             break;
         }
 
