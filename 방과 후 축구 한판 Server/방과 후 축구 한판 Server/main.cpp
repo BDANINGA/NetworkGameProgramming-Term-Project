@@ -42,9 +42,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     // --- 메인 루프 시작 ---
     while (true) {
 
-        InitializeCriticalSection(&g_InputLock);
-        // Lock을 걸고 연산 시작 
-        EnterCriticalSection(&g_InputLock);
+        
 
         // 저장된 최신 데이터를 지역 변수로 복사 
         PacketInputkey playerKeys[MAX_PLAYERS];
@@ -54,11 +52,10 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         memcpy(playerSpecialKeys, g_LatestInputSpecialKey, sizeof(g_LatestInputSpecialKey));
 
         // 다음 틱을 위해 전역 변수 초기화 
-        memset(g_LatestInputKey, 0, sizeof(g_LatestInputKey));
-        memset(g_LatestInputSpecialKey, 0, sizeof(g_LatestInputSpecialKey));
+       /* memset(g_LatestInputKey, 0, sizeof(g_LatestInputKey));
+        memset(g_LatestInputSpecialKey, 0, sizeof(g_LatestInputSpecialKey));*/
 
-        // Lock 해제
-        LeaveCriticalSection(&g_InputLock);
+        
 
 
         // 저장된 최신 데이터로 연산 (게임 로직)
@@ -104,6 +101,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         // 공, 키퍼 데이터 채우기
         statePkt.b_data.position = ball.getPosition();
         statePkt.b_data.rotation = ball.getRotation();
+        statePkt.b_data.rotationAngle = ball.getRotationAngle();
 
         statePkt.k_data.position = keeper.getPosition();
         statePkt.k_data.rotation = keeper.getRotation();
@@ -122,8 +120,8 @@ void GameSessionLoop(SOCKET clientSockets[]) {
                 std::cerr << "Send failed to player " << i << std::endl;
             }
         }
-        // 30 FPS
-        Sleep(33);
+        
+        Sleep(1);
     }
 }
 
