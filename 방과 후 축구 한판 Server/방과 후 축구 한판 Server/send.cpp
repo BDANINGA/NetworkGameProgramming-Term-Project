@@ -15,3 +15,11 @@ void send_userdata(SOCKET& socket, PacketUserData& userdata) {
     if (sent == sizeof(PacketUserData))
         std::cerr << "error: send_userdata()" << std::endl;
 }
+
+void send_loginresult(SOCKET& socket, PacketLoginResult& loginresult, bool result, char* message) {
+	loginresult.success = result;
+	strcpy_s(loginresult.message, message);
+    int sent = send(socket, (char*)&loginresult, sizeof(PacketLoginResult), 0);
+    if (sent == sizeof(PacketLoginResult))
+        std::cerr << "error: send_loginresult()" << std::endl;
+}
