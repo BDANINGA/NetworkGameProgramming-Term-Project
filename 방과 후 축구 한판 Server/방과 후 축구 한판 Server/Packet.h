@@ -20,6 +20,7 @@ struct PacketHeader {
 struct PacketLoginResult {
 	PacketHeader header{ htons(PKT_LOGIN_RESULT), htons(sizeof(PacketLoginResult) - sizeof(PacketHeader)) };
 	uint8_t success;
+	int myPlayerID;	
 	char message[64];      // 실패 시 이유 or 성공 메시지
 };
 
