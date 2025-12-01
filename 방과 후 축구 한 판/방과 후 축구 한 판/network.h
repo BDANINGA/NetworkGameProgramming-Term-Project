@@ -19,3 +19,9 @@ void PlayerInput(int key_value, PacketInputkey& key, SOCKET sock, bool toggle);
 void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock, bool toggle);
 
 bool RecvTCP(SOCKET sock, char* buffer, int size);
+
+bool RecvTCP(SOCKET sock, char* buffer, int size);
+
+void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw);
+
+void PlayerReady(PacketGameReady& readydata, SOCKET sock, bool ready);

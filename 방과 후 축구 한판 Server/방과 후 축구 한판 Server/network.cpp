@@ -1,5 +1,7 @@
 #include "network.h"
 
+
+
 // --- listen함수 ---
 bool ListenForClients(ClientContext& context, uint16_t port) {
     WSADATA wsaData;
@@ -105,12 +107,31 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
             break;
         }     
         case PKT_LOGIN: {
-			PacketLogin PlayerLogin;
-            if (!RecvTCP(sock, (char*)&PlayerLogin + sizeof(PacketHeader), header.size)) {
+            if (header.size != sizeof(PacketLogin) - sizeof(PacketHeader)) {
+                std::cerr << "Error: Invalid packet size for PKT_LOGIN. Expected 64, got " << header.size << std::endl;
+                break;
+            }
+            PacketLogin loginPkt;
+            if (!RecvTCP(sock, (char*)&loginPkt + sizeof(PacketHeader), header.size)) {
                 std::cout << "error_recv: login" << std::endl;
                 break;
 			}
-            // Login 처리
+
+            // --- Login 처리 ---
+
+
+            // --- 성공 메세지 및 ID 할당 ---
+            PacketLoginResult resPkt;
+
+            resPkt.success = 1; // 성공
+            strcpy_s(resPkt.message, "Login Success");
+
+            // 클라이언트 ID 할당
+            resPkt.myPlayerID = context->playerID;
+
+            send(sock, (char*)&resPkt, sizeof(PacketLoginResult), 0);
+
+            std::cout << "Player " << playerID << " Logged in." << std::endl;
             break;
         }
 
@@ -119,7 +140,8 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
 			PacketGameReady GameReady;
             if (!RecvTCP(sock, (char*)&GameReady + sizeof(PacketHeader), header.size)) {
                 std::cout << "error_recv: gameready" << std::endl;
-				break;
+                break;
+            }
             break;
         }
 
