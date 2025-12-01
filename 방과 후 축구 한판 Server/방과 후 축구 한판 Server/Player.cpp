@@ -202,6 +202,9 @@ void Player::Walk() {
 };
 bool Player::isSprint() { return this->sprint; };
 
+void Player::changeTackle() {
+	this->tackle = false;
+}
 void Player::TackleCool() {
 	if(this->tacklecool < 5) this->tacklecool += 0.1f;
 }
@@ -213,7 +216,7 @@ void Player::DoTackle() {
 }
 bool Player::isTackle() { return this->tackle; };
 
-void Player::Shoot(Ball& ball) {
+void Player::ShootInProgress(Ball& ball) {
 	if (this->shootingInprogress && distance <= 1.5f) {
 		if (this->strong)
 			this->shootingpower = 100.f;
@@ -222,34 +225,32 @@ void Player::Shoot(Ball& ball) {
 		if (!this->strong && this->shootingpower > this->max_shootingpower) {
 			this->shootingpower = this->max_shootingpower;
 		}
+		this->shooting = true;
 	}
-
-	if (this->shootingInprogress) {
-		if (ball.getPosition().y == 0.0f) {  // 공이 바닥에 있을 때만 발사
-			ball.setVelocity(glm::normalize(ball.getVelocity()) * this->shootingpower);  // 슈팅 파워 적용
-
-			if (this->curve) {
-				ball.changeCurve();
-				ball.setVelocity(glm::vec3(ball.getVelocity().x + 0.5f, this->shootingpower / 2.0f, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
-			}
-			else if (this->strong) {
-				ball.changeStrong();
-			}
-			else	
-				ball.setVelocity(glm::vec3(ball.getVelocity().x, this->shootingpower / 2.0f, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
-			
-			
-		}
-		this->shootingpower = 0.0f;  // 슈팅 파워 초기화
-		this->shootingInprogress = false;  // 슈팅 진행 중 상태 초기화
-	}
-	this->has_ball = false;
 }
-
+void Player::Shoot(Ball& ball) {
+	if (!this->shootingInprogress) {
+		ball.setVelocity(glm::normalize(ball.getVelocity()) * this->shootingpower);  // 슈팅 파워 적용
+		std::cout << "슛" << std::endl;
+		if (this->curve) {
+			ball.changeCurve();
+			ball.setVelocity(glm::vec3(ball.getVelocity().x + 0.5f, this->shootingpower / 2.0f, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
+		}
+		else if (this->strong) {
+			ball.changeStrong();
+		}
+		else
+			ball.setVelocity(glm::vec3(ball.getVelocity().x, this->shootingpower / 2.0f, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
+		this->shooting = false;
+		this->has_ball = false;
+	}
+}
 bool Player::isShooting() { return this->shootingInprogress; };
 void Player::changeShooting() {
 	this->shootingInprogress = this->keystates2['d'];
 }
+bool Player::isShoot() { return this->shooting; };
+
 bool Player::isCurve() { return this->curve; };
 void Player::changeCurve() {
 	this->curve = this->keystates2['z'];
@@ -296,6 +297,7 @@ void TackleEvent(Player* player, int count, Ball& ball) {
 						player[i].toggleHasBall(player[i].ishasBall());
 				}
 			}
+			player[i].changeTackle();
 		}	
 	}
 }

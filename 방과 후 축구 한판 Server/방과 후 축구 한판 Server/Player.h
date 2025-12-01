@@ -27,9 +27,11 @@ public:
 	void DoTackle();
 	bool isTackle();
 
+	void ShootInProgress(Ball& ball);
 	void Shoot(Ball& ball);
-
 	bool isShooting();
+	bool isShoot();
+
 	void changeShooting();
 	bool isCurve();
 	void changeCurve();
@@ -70,6 +72,7 @@ private:
 	bool curve = false;			// 감아차기
 	bool strong = false;		// 파워슛
 	bool tackle = false;		// 태클
+	bool shooting = false;		// 슛 상태
 
 };
 
