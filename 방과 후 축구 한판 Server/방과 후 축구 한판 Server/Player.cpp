@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------
 // Player
 Player::Player() = default;
-Player::Player(GLfloat x, GLfloat y, GLfloat z) {
-	this->position = { x, y, z };
+Player::Player(glm::vec3 pos) {
+	this->position = { pos };
 };
 Player::~Player() = default;
 
@@ -12,10 +12,8 @@ glm::vec3 Player::getPosition() { return this->position; };
 glm::vec3 Player::getRotation() { return this->rotation; };
 float Player::getBallDistance(Ball& ball) { return glm::distance(this->position, ball.getPosition()); };
 
-void Player::setPosition(GLfloat x, GLfloat y, GLfloat z) {
-	this->position.x = x;
-	this->position.y = y;
-	this->position.z = z;
+void Player::setPosition(glm::vec3 pos) {
+	this->position = pos;
 };
 
 void Player::Move(Ball& ball, bool keeper_has_ball) {
@@ -193,6 +191,9 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 		this->has_ball = false;
 };
 
+void Player::changeSprint() {
+	this->sprint = this->keystates2['e'];
+}
 void Player::Sprint() {
 	this->sprint = true;
 };
@@ -201,8 +202,11 @@ void Player::Walk() {
 };
 bool Player::isSprint() { return this->sprint; };
 
+void Player::TackleCool() {
+	if(this->tacklecool < 5) this->tacklecool += 0.1f;
+}
 void Player::DoTackle() {
-	if (this->keystates[' '] && this->tacklecool >= 1.5f && !this->has_ball) {
+	if (this->keystates[' '] && this->tacklecool >= 5 && !this->has_ball) {
 		this->tacklecool = 0.0f;
 		this->tackle = true;		// 나머지는 서버에서 연산시킨다.
 	}
@@ -243,21 +247,21 @@ void Player::Shoot(Ball& ball) {
 }
 
 bool Player::isShooting() { return this->shootingInprogress; };
-void Player::changeShooting(bool shootinginprogress) {
-	this->shootingInprogress = !this->shootingInprogress;
+void Player::changeShooting() {
+	this->shootingInprogress = this->keystates2['d'];
 }
 bool Player::isCurve() { return this->curve; };
-void Player::changeCurve(bool curve) {
-	this->curve = !this->curve;
+void Player::changeCurve() {
+	this->curve = this->keystates2['z'];
 }
 bool Player::isStrong() { return this->strong; };
-void Player::changeStrong(bool strong) {
-	this->strong = !this->strong;
+void Player::changeStrong() {
+	this->strong = this->keystates2['c'];
 }
 
 bool Player::ishasBall() { return this->has_ball; };
-void Player::toggleHasBall(bool has_ball) {
-	this->has_ball = !this->has_ball;
+void Player::toggleHasBall(bool toggle) {
+	this->has_ball = toggle;
 }
 
 void Player::keyDown(int keys) {
@@ -265,6 +269,12 @@ void Player::keyDown(int keys) {
 };
 void Player::keyUp(int keys) {
 	this->keystates[keys] = false;
+};
+void Player::keyDown2(int keys) {
+	this->keystates2[keys] = true;
+};
+void Player::keyUp2(int keys) {
+	this->keystates2[keys] = false;
 };
 bool Player::isKey(int keys) { return this->keystates[keys]; };
 

@@ -20,9 +20,11 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     Keeper keeper(0, 0, -32);
 
     // 플레이어 초기 위치 설정 - (수정 필요)
-    /*players[0].setPosition(0, 0, 5);
-    players[1].setPosition(3, 0, 5);
-    players[2].setPosition(-3, 0, 5);*/
+    for (int i = 0; i < MAX_PLAYERS; ++i) {
+        glm::vec3 random_DirVec = randomDir();
+        random_DirVec.y = 0;
+        players[i].setPosition(random_DirVec * 20.0f);
+    }
 
     // 시작 시간 설정
     time_t startTime = time(NULL);
@@ -41,9 +43,6 @@ void GameSessionLoop(SOCKET clientSockets[]) {
 
     // --- 메인 루프 시작 ---
     while (true) {
-
-        
-
         // 저장된 최신 데이터를 지역 변수로 복사 
         PacketInputkey playerKeys[MAX_PLAYERS];
         PacketInputspecialkey playerSpecialKeys[MAX_PLAYERS];
@@ -51,20 +50,14 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         memcpy(playerKeys, g_LatestInputKey, sizeof(g_LatestInputKey));
         memcpy(playerSpecialKeys, g_LatestInputSpecialKey, sizeof(g_LatestInputSpecialKey));
 
-        // 다음 틱을 위해 전역 변수 초기화 
-       /* memset(g_LatestInputKey, 0, sizeof(g_LatestInputKey));
-        memset(g_LatestInputSpecialKey, 0, sizeof(g_LatestInputSpecialKey));*/
-
-        
-
 
         // 저장된 최신 데이터로 연산 (게임 로직)
 
         // 입력값 적용
         for (int i = 0; i < MAX_PLAYERS; i++) {
             for (int k = 0; k < 256; k++) {
-                if (playerKeys[i].key[k]) players[i].keyDown(k);
-                else players[i].keyUp(k);
+                if (playerKeys[i].key[k]) players[i].keyDown2(k);
+                else players[i].keyUp2(k);
 
                 if (playerSpecialKeys[i].key[k]) players[i].keyDown(k);
                 else players[i].keyUp(k);
@@ -72,16 +65,20 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         }
 
         // 객체 Move() 호출
-        bool playerHasBall = false;
         for (int i = 0; i < MAX_PLAYERS; i++) {
+            players[i].changeSprint();
+            players[i].changeShooting();
+            players[i].changeCurve();
+            players[i].changeStrong();
+            players[i].TackleCool();
+
             players[i].Move(ball, keeper.ishasBall());
-            if (players[i].ishasBall()) {
-                playerHasBall = true;
-                whichPlayerHasBall = i;
-            }
         }
-        keeper.Move(ball.getPosition(), playerHasBall);
+
+        keeper.Move(ball.getPosition());
         ball.Move(keeper.getPosition(), keeper.ishasBall());
+
+        TackleEvent(players, MAX_PLAYERS, ball);
 
         // 충돌 및 골, 시간 종료 등
         for (int i = 0; i < MAX_PLAYERS; i++) {

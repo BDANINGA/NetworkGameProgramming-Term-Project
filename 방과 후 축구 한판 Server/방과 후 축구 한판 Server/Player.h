@@ -5,7 +5,7 @@ class Player : Object
 {
 public:
 	Player();
-	Player(GLfloat x, GLfloat y, GLfloat z);
+	Player(glm::vec3 pos);
 
 	~Player();
 
@@ -13,31 +13,36 @@ public:
 	glm::vec3 getRotation();
 	float getBallDistance(Ball& ball);
 
-	void setPosition(GLfloat x, GLfloat y, GLfloat z);
+	void setPosition(glm::vec3 pos);
 
 	void Move(Ball& ball, bool keeper_has_ball);
 
+	void changeSprint();
 	void Sprint();
 	void Walk();
 	bool isSprint();
 
+	void TackleCool();
+	void changeTackle();
 	void DoTackle();
 	bool isTackle();
 
 	void Shoot(Ball& ball);
 
 	bool isShooting();
-	void changeShooting(bool shootinginprogress);
+	void changeShooting();
 	bool isCurve();
-	void changeCurve(bool curve);
+	void changeCurve();
 	bool isStrong();
-	void changeStrong(bool strong);
+	void changeStrong();
 
 	bool ishasBall();
-	void toggleHasBall(bool has_ball);
+	void toggleHasBall(bool toggle);
 
 	void keyDown(int keys);
 	void keyUp(int keys);
+	void keyDown2(int keys);
+	void keyUp2(int keys);
 	bool isKey(int keys);
 
 
@@ -59,7 +64,8 @@ private:
 
 	bool sprint{};
 	bool has_ball= true;	// 첫 렌더링을 위해 true로 바꿈
-	bool keystates[256]{};	// 키보드 상태
+	bool keystates[256]{};	// 스페셜 키 상태
+	bool keystates2[256]{};	// 기본 키 상태
 	bool shootingInprogress{};  // 슈팅 진행 중 여부 (d 키가 눌린 상태인지)
 	bool curve = false;			// 감아차기
 	bool strong = false;		// 파워슛
