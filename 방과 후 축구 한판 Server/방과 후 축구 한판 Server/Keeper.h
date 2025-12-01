@@ -14,8 +14,7 @@ public:
 
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
 
-	void Move(glm::vec3 ballPos, bool has_ball);
-	void Draw(glm::vec3 ballPos, bool has_ball, GLuint vao_player);
+	void Move(glm::vec3 ballPos);
 
 	void hasBall();
 	void NothasBall();

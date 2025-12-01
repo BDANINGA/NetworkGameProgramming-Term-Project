@@ -11,20 +11,10 @@ Keeper::~Keeper() = default;
 glm::vec3 Keeper::getPosition() { return this->position; };
 glm::vec3 Keeper::getRotation() { return this->rotation; };
 
-void Keeper::Move(glm::vec3 ballPos, bool has_ball) {
+void Keeper::Move(glm::vec3 ballPos) {
 	// 골키퍼의 이동 범위 설정
 	this->targetX = ballPos.x;
-	if (!has_ball)
-	{
-		this->velocity = 0.05f;
-		//targetY = ballPos.y;
-	}
-
-	else {
-		this->targetY = -0.1f;
-		this->minX = -1.0f;
-		this->maxX = 1.0f;
-	}
+	
 	// 목표 위치를 범위 내로 제한
 	this->targetX = glm::clamp(this->targetX, this->minX, this->maxX);
 	this->targetY = glm::clamp(this->targetY, this->minY, this->maxY);
