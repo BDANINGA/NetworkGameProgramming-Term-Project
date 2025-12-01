@@ -18,6 +18,8 @@ glm::vec3 Ball::getDirection() { return this->direction; };
 float Ball::getRotationAngle() { return this->rotationAngle; };
 float Ball::getAcceleration() { return this->acceleration; };
 
+extern uint16_t currentScore[3];
+
 void Ball::setPosition(GLfloat x, GLfloat y, GLfloat z) {
 	this->position.x = x;
 	this->position.y = y;
@@ -87,6 +89,11 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		// °ñ´ë¿¡ µé¾î°¨
 		if (checkSegmentCollision(startPos, endPos, bottomBarPos, bottomBarScale) && this->position.z <= -35) {
 			std::cout << "°ñ" << std::endl;
+
+			if (this->lastOwnerID >= 0) {
+				currentScore[this->lastOwnerID] += 1;
+				std::cout << "Goal! Player " << this->lastOwnerID << " Score Up!" << std::endl;
+			}
 
 			this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 			this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -177,4 +184,11 @@ bool Ball::isFirst() {
 
 void Ball::setMaxspeed(float maxspeed) {
 	this->max_speed = maxspeed;
+}
+
+void Ball::setLastOwner(int playerID) {
+	this->lastOwnerID = playerID;
+}
+int Ball::getLastOwner() {
+	return this->lastOwnerID;
 }

@@ -12,6 +12,9 @@ PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];
 // --- 전역 변수 보호용 Lock ---
 CRITICAL_SECTION g_InputLock;
 
+uint16_t currentScore[3]{ 0,0,0 };
+
+
 void GameSessionLoop(SOCKET clientSockets[]) {
 
     // --- 게임 월드(World) 초기화 (수정 필요)---
@@ -30,7 +33,6 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     time_t startTime = time(NULL);
 
     // 게임 스코어 초기화
-    uint16_t currentScore[3]{ 0,0,0 };
 
     // 공의 마지막 터치 기억 (0번째 플레이어가 처음 공을 소유/터치했다고 시작)
     uint8_t whichPlayerHasBall{ 0 };
@@ -75,6 +77,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
             
 
             if (players[i].ishasBall() && players[i].isShooting())
+                ball.setLastOwner(i);
                 players[i].ShootInProgress(ball);
             if (players[i].isShoot())
                 players[i].Shoot(ball);
