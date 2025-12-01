@@ -17,7 +17,7 @@ PacketInputspecialkey s_input{};
 PacketRenderData renderData;
 
 extern SOCKET g_ServerSocket;
-int g_CurrentScores[3]{ 0,0,0 };
+int g_CurrentScores[MAX_PLAYERS]{};
 int g_SecondsRemaining{ 300 };
 //------------------------------------------------------------------------
 bool start = true;
