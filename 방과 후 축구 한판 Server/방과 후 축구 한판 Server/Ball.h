@@ -25,17 +25,20 @@ public:
 	void setVelocity(glm::vec3 velocity);
 	void setDirection(glm::vec3 direction);
 	void setAcceleration(float acceleration);
+	void setMaxspeed(float max_speed);
 
 	void Move(glm::vec3 keeperPos, bool keeper_has_ball);
 
 	void changeCurve();
 	void changeStrong();
+	void changeFirst();
+	bool isFirst();
 
 private:
 	glm::vec3 velocity{};
 	glm::vec3 direction{};
 	float acceleration{};
-	const float max_speed = 1.0f; // 공의 최대 속도
+	float max_speed = 0.3f; // 공의 최대 속도
 	
 	// 공의 회전 각도와 회전 속도 변수 추가
 	float rotationAngle{};  // 회전 각도 (라디안)
@@ -44,4 +47,5 @@ private:
 
 	bool curve{};
 	bool strong{};
+	bool first = false;
 };

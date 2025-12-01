@@ -71,6 +71,8 @@ void GameSessionLoop(SOCKET clientSockets[]) {
             players[i].changeCurve();
             players[i].changeStrong();
             players[i].TackleCool();
+            players[i].DoTackle();
+            
 
             if (players[i].ishasBall() && players[i].isShooting())
                 players[i].ShootInProgress(ball);

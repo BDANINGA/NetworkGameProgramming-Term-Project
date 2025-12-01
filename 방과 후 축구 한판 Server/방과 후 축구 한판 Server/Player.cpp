@@ -25,11 +25,13 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 			this->acceleration = 0.005f;
 			this->max_speed = 0.1f;
 			ball.setAcceleration(0.01f);
+			ball.setMaxspeed(0.15f);
 		}
 		else {
 			this->acceleration = 0.002f;  // 플레이어의 가속도
 			this->max_speed = 0.07f;
 			ball.setAcceleration(0.002f);
+			ball.setMaxspeed(0.07f);
 		}
 
 		// 방향키에 따른 플레이어 이동 방향 설정
@@ -103,16 +105,25 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 			}
 		}
 	}
-	else if (!this->has_ball && this-> distance <= 5.0f) {
-		// 플레이어와 공 사이의 벡터 차이 계산
-		distanceVec = this->position - ball.getPosition();
-		distanceVec = glm::normalize(distanceVec);
-		// 플레이어가 공으로 점진적으로 다가가도록 이동
-		this->velocity.x -= distanceVec.x * this->acceleration;
-		this->velocity.z -= distanceVec.z * this->acceleration;
-		ball.setAcceleration(0.0f);
-	}
+	//else if (!this->has_ball && this-> distance <= 5.0f) {
+	//	// 플레이어와 공 사이의 벡터 차이 계산
+	//	distanceVec = this->position - ball.getPosition();
+	//	distanceVec = glm::normalize(distanceVec);
+	//	// 플레이어가 공으로 점진적으로 다가가도록 이동
+	//	this->velocity.x -= distanceVec.x * this->acceleration;
+	//	this->velocity.z -= distanceVec.z * this->acceleration;
+	//	ball.setAcceleration(0.0f);
+	//}
 	else {
+		if (this->sprint) {
+			this->acceleration = 0.005f;
+			this->max_speed = 0.1f;
+		}
+		else {
+			this->acceleration = 0.002f;  // 플레이어의 가속도
+			this->max_speed = 0.07f;
+		}
+
 		if (this->keystates[GLUT_KEY_UP]) {
 			this->direction.z = -1;  // 뒤쪽으로 이동
 			this->rotation.y = glm::radians(180.0f);
@@ -182,13 +193,10 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 	// 속도를 기준으로 플레이어 위치 업데이트
 	this->position += this->velocity;  // 현재 속도를 반영하여 플레이어 위치 이동
 
-
-	// Tackle 함수를 넣게 된다면 이것을 빼야함.
-	if (this->distance <= maxdistance && !keeper_has_ball) {
+	if (!this->has_ball && !ball.isFirst() && distance <= 0.1f) {
 		this->has_ball = true;
+		ball.changeFirst();
 	}
-	else
-		this->has_ball = false;
 };
 
 void Player::changeSprint() {
@@ -206,12 +214,13 @@ void Player::changeTackle() {
 	this->tackle = false;
 }
 void Player::TackleCool() {
-	if(this->tacklecool < 5) this->tacklecool += 0.1f;
+	if(this->tacklecool < 5) this->tacklecool += 1;
 }
 void Player::DoTackle() {
-	if (this->keystates[' '] && this->tacklecool >= 5 && !this->has_ball) {
+	if (this->keystates2['x'] && this->tacklecool >= 5 && !this->has_ball) {
 		this->tacklecool = 0.0f;
 		this->tackle = true;		// 나머지는 서버에서 연산시킨다.
+		std::cout << "태클 준비" << std::endl;
 	}
 }
 bool Player::isTackle() { return this->tackle; };
@@ -291,10 +300,12 @@ void TackleEvent(Player* player, int count, Ball& ball) {
 	for (int i = 0; i < count; ++i) {
 		if (player[i].isTackle()) {
 			for (int j = 0; j < count; ++j) {
-				if (player[j].ishasBall()) 
+				if (player[j].ishasBall()){ 
 					if (player[i].getBallDistance(ball) < player[j].getBallDistance(ball)) {
-						player[j].toggleHasBall(player[j].ishasBall());
-						player[i].toggleHasBall(player[i].ishasBall());
+						player[j].toggleHasBall(false);
+						player[i].toggleHasBall(true);
+						std::cout << "태클 성공" << std::endl;
+					}
 				}
 			}
 			player[i].changeTackle();

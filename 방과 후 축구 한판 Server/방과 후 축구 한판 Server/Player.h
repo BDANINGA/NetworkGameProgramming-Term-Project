@@ -65,7 +65,7 @@ private:
 	time_t tacklecool{};	// Tackle의 쿨타임 Session Loop에서 연산.
 
 	bool sprint{};
-	bool has_ball= true;	// 첫 렌더링을 위해 true로 바꿈
+	bool has_ball= false;	// 첫 렌더링을 위해 true로 바꿈
 	bool keystates[256]{};	// 스페셜 키 상태
 	bool keystates2[256]{};	// 기본 키 상태
 	bool shootingInprogress{};  // 슈팅 진행 중 여부 (d 키가 눌린 상태인지)

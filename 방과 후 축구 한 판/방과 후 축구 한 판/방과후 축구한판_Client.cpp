@@ -100,6 +100,10 @@ void Keyboard(unsigned char key, int x, int y) {
 	case 'C':
 		PlayerInput('c', input, g_ServerSocket, true);
 		break;
+	case 'x':
+	case 'X':
+		PlayerInput('x', input, g_ServerSocket, true);
+		break;
 	case 'q':
 		// debug: game_quit
 		glutLeaveMainLoop();
@@ -124,6 +128,10 @@ void KeyboardUp(unsigned char key, int x, int y) {
 	case 'c':
 	case 'C':
 		PlayerInput('c', input, g_ServerSocket, false);
+		break;
+	case 'x':
+	case 'X':
+		PlayerInput('x', input, g_ServerSocket, false);
 		break;
 	}
 	glutPostRedisplay();

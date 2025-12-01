@@ -1,7 +1,7 @@
 #pragma once
 #include "Packet.h"
 
-#define MAX_PLAYERS 1
+#define MAX_PLAYERS 2
 
 extern PacketInputkey g_LatestInputKey[MAX_PLAYERS];
 extern PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];
@@ -11,7 +11,7 @@ struct ClientContext {
     SOCKET socket;
     int playerID;
 };
-
+    
 // --- listenÇÔ¼ö ---
 bool ListenForClients(ClientContext& context, uint16_t port);
 

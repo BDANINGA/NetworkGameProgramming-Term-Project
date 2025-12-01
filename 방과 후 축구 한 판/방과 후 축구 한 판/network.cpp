@@ -63,8 +63,8 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
                 break;
             }
             for (int i = 0; i < MAX_PLAYERS; ++i) {
-                player[i].setPosition(renderData.p_data->position);
-                player[i].setRotation(renderData.p_data->rotation);
+                player[i].setPosition(renderData.p_data[i].position);
+                player[i].setRotation(renderData.p_data[i].rotation);
             }
             ball.setPosition(renderData.b_data.position);
             ball.setRotation(renderData.b_data.rotation);

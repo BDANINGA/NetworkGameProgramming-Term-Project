@@ -167,3 +167,14 @@ void Ball::changeCurve() {
 void Ball::changeStrong() {
 	this->strong = !this->strong;
 }
+
+void Ball::changeFirst() {
+	this->first = true;
+}
+bool Ball::isFirst() {
+	return this->first;
+}
+
+void Ball::setMaxspeed(float maxspeed) {
+	this->max_speed = maxspeed;
+}
