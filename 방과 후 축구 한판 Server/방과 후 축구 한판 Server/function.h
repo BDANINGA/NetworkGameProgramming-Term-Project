@@ -18,3 +18,6 @@ void UpdateScore();
 
 // ReturntoLogin - 개발일정에 미처 적어두지 못했음. Login 관련이기 떄문에 1차토의 후 일정 검토
 void ReturntoLogin();
+
+// randomDir() - 11.27일 구현
+glm::vec3 randomDir();

@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "function.h"
+#include <random>
 
 #define M_PI 3.14159265358979323846
 
@@ -74,4 +75,15 @@ void UpdateScore() {
 // ReturntoLogin - 개발일정에 미처 적어두지 못했음. Login 관련이기 떄문에 1차토의 후 일정 검토
 void ReturntoLogin() {
 
+}
+
+// randomDir() - 11.27일 구현
+glm::vec3 randomDir()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::normal_distribution<float> dist(0.0f, 1.0f);
+
+    glm::vec3 v(dist(gen), dist(gen), dist(gen));
+    return glm::normalize(v);
 }
