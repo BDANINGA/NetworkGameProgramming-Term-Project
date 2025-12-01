@@ -23,6 +23,11 @@ bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t por
         return false;
     }
 
+    BOOL optval = TRUE;
+    if (setsockopt(g_ServerSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval)) == SOCKET_ERROR) {
+        std::cerr << "setsockopt TCP_NODELAY failed" << std::endl;
+    }
+
     sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(port);

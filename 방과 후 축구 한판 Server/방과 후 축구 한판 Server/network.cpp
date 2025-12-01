@@ -58,12 +58,12 @@ SOCKET AcceptClient(SOCKET listenSocket) {
         return INVALID_SOCKET;
     }
 
-    /*int flag = 1;
+    int flag = 1;
     int result = setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&flag, sizeof(flag));
 
     if (result == SOCKET_ERROR) {
         printf("setsockopt failed: %d\n", WSAGetLastError());
-    }*/
+    }
 
     return clientSocket;
 }
