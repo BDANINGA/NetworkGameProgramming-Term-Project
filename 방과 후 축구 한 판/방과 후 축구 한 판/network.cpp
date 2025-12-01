@@ -3,7 +3,7 @@
 
 extern bool gameover;
 extern PacketRenderData renderData;
-extern Player player[3];
+extern Player player[MAX_PLAYERS];
 extern Ball ball;
 extern Keeper keeper;
 
