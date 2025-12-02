@@ -34,6 +34,9 @@ public:
 	void changeFirst();
 	bool isFirst();
 
+	void setLastOwner(int playerID);
+	int getLastOwner();
+
 private:
 	glm::vec3 velocity{};
 	glm::vec3 direction{};
@@ -48,4 +51,6 @@ private:
 	bool curve{};
 	bool strong{};
 	bool first = false;
+
+	int lastOwnerID = -1;
 };
