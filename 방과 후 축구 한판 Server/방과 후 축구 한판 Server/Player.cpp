@@ -25,7 +25,7 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 			this->acceleration = 0.005f;
 			this->max_speed = 0.1f;
 			ball.setAcceleration(0.01f);
-			ball.setMaxspeed(0.15f);
+			ball.setMaxspeed(0.12f);
 		}
 		else {
 			this->acceleration = 0.002f;  // 플레이어의 가속도
@@ -92,6 +92,12 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 			if (glm::length(this->velocity) > this->max_speed) {
 				this->velocity = glm::normalize(this->velocity) * (this->max_speed);  // 최대 속도 제한
 			}
+			// 플레이어와 공 사이의 벡터 차이 계산
+			distanceVec = this->position - ball.getPosition();
+			distanceVec = glm::normalize(distanceVec);
+			// 플레이어가 공으로 점진적으로 다가가도록 이동
+			this->velocity.x -= distanceVec.x * this->acceleration;
+			this->velocity.z -= distanceVec.z * this->acceleration;
 		}
 		else {
 			// 이동하지 않으면 감속을 적용
@@ -105,15 +111,6 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 			}
 		}
 	}
-	//else if (!this->has_ball && this-> distance <= 5.0f) {
-	//	// 플레이어와 공 사이의 벡터 차이 계산
-	//	distanceVec = this->position - ball.getPosition();
-	//	distanceVec = glm::normalize(distanceVec);
-	//	// 플레이어가 공으로 점진적으로 다가가도록 이동
-	//	this->velocity.x -= distanceVec.x * this->acceleration;
-	//	this->velocity.z -= distanceVec.z * this->acceleration;
-	//	ball.setAcceleration(0.0f);
-	//}
 	else {
 		if (this->sprint) {
 			this->acceleration = 0.005f;

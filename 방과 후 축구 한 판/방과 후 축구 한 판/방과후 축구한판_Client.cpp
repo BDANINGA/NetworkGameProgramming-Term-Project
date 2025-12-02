@@ -17,6 +17,8 @@ PacketInputspecialkey s_input{};
 PacketRenderData renderData;
 extern SOCKET g_ServerSocket;
 
+// 점수 sprintf
+char scoreString[128];
 int g_CurrentScores[MAX_PLAYERS]{};
 int g_SecondsRemaining{ 300 };
 
@@ -60,8 +62,7 @@ GLvoid drawScene() {
 	char timeString[32];
 	sprintf(timeString, "TIME %02d:%02d", minutes, seconds);
 
-	// 점수 sprintf
-	char scoreString[128];
+	
 	sprintf(scoreString, "P1: %d  P2: %d  P3: %d",
 		g_CurrentScores[0], g_CurrentScores[1], g_CurrentScores[2]);
 
@@ -200,9 +201,21 @@ GLvoid gameoverScene() {
 	drawGoal(vao_goalpost);
 	drawBackground();
 
-	// 카메라 설정: 플레이어를 따라가는 카메라 server로부터 받은 player position으로 받아서 설정
-	camera.setPosition(glm::vec3(0.0f, 1.0f, 5.0f));  // 플레이어 위치 기준으로 카메라 위치 설정 (위 2, 뒤 5)
-	camera.setDirection(glm::vec3(0.0f, 0.0f, 0.0f));  // 카메라는 플레이어를 향하도록 설정
+	drawText(width / 2, height - 30, "스코어");
+	drawText(width / 5 * 2, height - 80, scoreString);
+	drawText(width / 2, height - 130, "승리한 플레이어");
+	drawText(width / 2, height - 180, "Player1");
+
+	drawText(50, height - 230, "P1 경기 전적");
+	drawText(50, height - 280, "x전 y승 z패 승률: xx");
+	drawText(50, height - 330, "P2 경기 전적");
+	drawText(50, height - 380, "x전 y승 z패 승률: xx");
+	drawText(50, height - 430, "P3 경기 전적");
+	drawText(50, height - 480, "x전 y승 z패 승률: xx");
+
+
+	camera.setPosition(glm::vec3(0.0f, 1.0f, 5.0f)); 
+	camera.setDirection(glm::vec3(0.0f, 0.0f, 0.0f));  
 
 	viewTransform();
 	projectionTransform();
