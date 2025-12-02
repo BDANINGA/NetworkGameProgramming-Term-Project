@@ -92,12 +92,6 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 			if (glm::length(this->velocity) > this->max_speed) {
 				this->velocity = glm::normalize(this->velocity) * (this->max_speed);  // 최대 속도 제한
 			}
-			// 플레이어와 공 사이의 벡터 차이 계산
-			distanceVec = this->position - ball.getPosition();
-			distanceVec = glm::normalize(distanceVec);
-			// 플레이어가 공으로 점진적으로 다가가도록 이동
-			this->velocity.x -= distanceVec.x * this->acceleration;
-			this->velocity.z -= distanceVec.z * this->acceleration;
 		}
 		else {
 			// 이동하지 않으면 감속을 적용
@@ -110,6 +104,12 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 				this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 			}
 		}
+		// 플레이어와 공 사이의 벡터 차이 계산
+		distanceVec = this->position - ball.getPosition();
+		distanceVec = glm::normalize(distanceVec);
+		// 플레이어가 공으로 점진적으로 다가가도록 이동
+		this->velocity.x -= distanceVec.x * this->acceleration;
+		this->velocity.z -= distanceVec.z * this->acceleration;
 	}
 	else {
 		if (this->sprint) {
@@ -225,7 +225,7 @@ bool Player::isTackle() { return this->tackle; };
 void Player::ShootInProgress(Ball& ball) {
 	if (this->shootingInprogress && distance <= 1.5f) {
 		if (this->strong)
-			this->shootingpower = 100.f;
+			this->shootingpower = 1.0f;
 		else
 			this->shootingpower += this->shooting_increase;
 		if (!this->strong && this->shootingpower > this->max_shootingpower) {
@@ -237,16 +237,17 @@ void Player::ShootInProgress(Ball& ball) {
 void Player::Shoot(Ball& ball) {
 	if (!this->shootingInprogress) {
 		ball.setVelocity(glm::normalize(ball.getVelocity()) * this->shootingpower);  // 슈팅 파워 적용
+		ball.setMaxspeed(3.0f);
 		std::cout << "슛" << std::endl;
 		if (this->curve) {
 			ball.changeCurve();
-			ball.setVelocity(glm::vec3(ball.getVelocity().x + 0.5f, this->shootingpower / 2.0f, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
+			ball.setVelocity(glm::vec3(ball.getVelocity().x + 0.5f, this->shootingpower, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
 		}
 		else if (this->strong) {
 			ball.changeStrong();
 		}
 		else
-			ball.setVelocity(glm::vec3(ball.getVelocity().x, this->shootingpower / 2.0f, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
+			ball.setVelocity(glm::vec3(ball.getVelocity().x, this->shootingpower, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
 		this->shooting = false;
 		this->has_ball = false;
 	}

@@ -65,6 +65,8 @@ void GameSessionLoop(SOCKET clientSockets[]) {
                 else players[i].keyUp(k);
             }
         }
+        keeper.Move(ball.getPosition());
+        ball.Move(keeper.getPosition(), keeper.ishasBall());
 
         // ∞¥√º Move() »£√‚
         for (int i = 0; i < MAX_PLAYERS; i++) {
@@ -76,16 +78,14 @@ void GameSessionLoop(SOCKET clientSockets[]) {
             players[i].DoTackle();
             
 
-            if (players[i].ishasBall() && players[i].isShooting())
+            if (players[i].ishasBall() && players[i].isShooting()) {
                 ball.setLastOwner(i);
                 players[i].ShootInProgress(ball);
+            }
             if (players[i].isShoot())
                 players[i].Shoot(ball);
             players[i].Move(ball, keeper.ishasBall());
         }
-
-        keeper.Move(ball.getPosition());
-        ball.Move(keeper.getPosition(), keeper.ishasBall());
 
         TackleEvent(players, MAX_PLAYERS, ball);
 

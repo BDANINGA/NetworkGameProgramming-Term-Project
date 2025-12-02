@@ -59,8 +59,8 @@ private:
 	
 	float distance{};	// 공과 플레이어 사이의 거리
 	float shootingpower{};  // 슈팅 파워 변수 (0.0 ~ MAX_SHOOTING_POWER 범위)
-	const float max_shootingpower = 50.0f;  // 최대 슈팅 파워
-	const float shooting_increase = 1.0f;  // 슈팅 파워 증가량
+	const float max_shootingpower = 1.0f;  // 최대 슈팅 파워
+	const float shooting_increase = 0.01f;  // 슈팅 파워 증가량
 
 	time_t tacklecool{};	// Tackle의 쿨타임 Session Loop에서 연산.
 
