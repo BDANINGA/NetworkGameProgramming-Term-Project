@@ -20,4 +20,4 @@ void UpdateScore();
 void ReturntoLogin();
 
 // randomDir() - 11.27ÀÏ ±¸Çö
-glm::vec3 randomDir();
+glm::vec3 randomDir_xz();

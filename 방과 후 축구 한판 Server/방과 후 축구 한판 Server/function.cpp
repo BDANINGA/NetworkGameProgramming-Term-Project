@@ -77,13 +77,13 @@ void ReturntoLogin() {
 
 }
 
-// randomDir() - 11.27老 备泅
-glm::vec3 randomDir()
+// randomDir_xz() - 11.27老 备泅
+glm::vec3 randomDir_xz()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::normal_distribution<float> dist(0.0f, 1.0f);
 
-    glm::vec3 v(dist(gen), dist(gen), dist(gen));
+    glm::vec3 v(dist(gen), 0, dist(gen));
     return glm::normalize(v);
 }

@@ -24,19 +24,16 @@ void GameSessionLoop(SOCKET clientSockets[]) {
 
     // 플레이어 초기 위치 설정 - (수정 필요)
     for (int i = 0; i < MAX_PLAYERS; ++i) {
-        glm::vec3 random_DirVec = randomDir();
+        glm::vec3 random_DirVec = randomDir_xz();
         random_DirVec.y = 0;
-        players[i].setPosition(random_DirVec * 20.0f);
+        players[i].setPosition(random_DirVec * 10.0f);
+        std::cout << players[i].getPosition().x << players[i].getPosition().y << players[i].getPosition().z <<std::endl;
     }
 
     // 시작 시간 설정
     time_t startTime = time(NULL);
 
     // 게임 스코어 초기화
-
-    // 공의 마지막 터치 기억 (0번째 플레이어가 처음 공을 소유/터치했다고 시작)
-    uint8_t whichPlayerHasBall{ 0 };
-
 
     //PacketRenderData 준비
     PacketRenderData statePkt;
