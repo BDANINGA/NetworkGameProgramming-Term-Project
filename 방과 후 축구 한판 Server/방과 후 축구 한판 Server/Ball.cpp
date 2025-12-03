@@ -147,23 +147,23 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 	
 
 	// x¿Í z °æ°è¿¡ ´êÀ¸¸é ¹Ý»ç Ã³¸®
-	if (this->position.x < -50.0f) {
+	if (this->position.x < -20.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
 	}
-	else if (this->position.x > 50.0f) {
+	else if (this->position.x > 20.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
 	}
 
-	if (this->position.z < -50.0f) {
+	if (this->position.z < -40.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
 	}
-	else if (this->position.z > 50.0f) {
+	else if (this->position.z > 40.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
@@ -181,8 +181,8 @@ void Ball::changeStrong() {
 	this->strong = !this->strong;
 }
 
-void Ball::changeFirst() {
-	this->first = true;
+void Ball::changeFirst(int value) {
+	this->first = value;
 }
 bool Ball::isFirst() {
 	return this->first;
