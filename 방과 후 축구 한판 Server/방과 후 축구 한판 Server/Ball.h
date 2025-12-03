@@ -41,7 +41,7 @@ private:
 	glm::vec3 velocity{};
 	glm::vec3 direction{};
 	float acceleration{};
-	float max_speed = 0.3f; // 공의 최대 속도
+	float max_speed = 3.0f; // 공의 최대 속도
 	
 	// 공의 회전 각도와 회전 속도 변수 추가
 	float rotationAngle{};  // 회전 각도 (라디안)
