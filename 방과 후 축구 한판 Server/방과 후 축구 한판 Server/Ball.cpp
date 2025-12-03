@@ -69,6 +69,11 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		std::cout << "골키퍼와 충돌!" << std::endl;
 		keeper_has_ball = 1;
 		this->velocity *= 0.0f;
+
+		Sleep(300);
+
+		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
+		this->acceleration = 0.f;
 	}
 	else
 	{
@@ -96,7 +101,8 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 			}
 
 			this->position = glm::vec3(0.0f, 0.0f, 0.0f);
-			this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+			this->velocity *= 0.f;
+			this->acceleration = 0.f;
 		}
 	}
 	// 중력 적용
