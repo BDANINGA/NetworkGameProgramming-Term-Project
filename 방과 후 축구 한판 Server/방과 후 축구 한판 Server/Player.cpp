@@ -207,7 +207,7 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 
 	if (!this->has_ball && !ball.isFirst() && this->distance <= CAN_KICK_DISTANCE) {
 		this->has_ball = true;
-		ball.changeFirst();
+		ball.changeFirst(true);
 	}
 };
 

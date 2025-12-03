@@ -31,7 +31,7 @@ public:
 
 	void changeCurve();
 	void changeStrong();
-	void changeFirst();
+	void changeFirst(int value);
 	bool isFirst();
 
 	void setLastOwner(int playerID);
