@@ -21,3 +21,5 @@ void ReturntoLogin();
 
 // randomDir() - 11.27ÀÏ ±¸Çö
 glm::vec3 randomDir_xz();
+
+bool RegisterUser(const std::string& userID, const std::string& userPW);

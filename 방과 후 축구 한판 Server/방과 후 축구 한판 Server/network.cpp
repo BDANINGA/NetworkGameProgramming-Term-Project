@@ -106,30 +106,64 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
         }     
         case PKT_LOGIN: {
             if (header.size != sizeof(PacketLogin) - sizeof(PacketHeader)) {
-                std::cerr << "Error: Invalid packet size for PKT_LOGIN. Expected 64, got " << header.size << std::endl;
+                std::cerr << "Error: Invalid packet size for PKT_LOGIN. Expected "
+                          << sizeof(PacketLogin) - sizeof(PacketHeader) << ", got " << header.size << std::endl;
                 break;
             }
+
             PacketLogin loginPkt;
-            if (!RecvTCP(sock, (char*)&loginPkt + sizeof(PacketHeader), header.size)) {
+            // 헤더 이후 페이로드 수신
+            if (!RecvTCP(sock, (char*)(&loginPkt) + sizeof(PacketHeader), header.size)) {
                 std::cout << "error_recv: login" << std::endl;
                 break;
-			}
+            }
 
-            // --- Login 처리 ---
+            // 수신된 ID/PW를 std::string으로 변환 (널 종료를 대비)
+            std::string recvID(loginPkt.userID, strnlen(loginPkt.userID, sizeof(loginPkt.userID)));
+            std::string recvPW(loginPkt.userPW, strnlen(loginPkt.userPW, sizeof(loginPkt.userPW)));
 
+            bool found = false;
 
-            // --- 성공 메세지 및 ID 할당 ---
+            std::ifstream file("IDPW.txt");
+            if (file.is_open()) {
+                std::string line;
+                while (std::getline(file, line)) {
+                    if (line.empty()) continue;
+                    // 공백으로 구분된 id pw 예상
+                    auto pos = line.find(' ');
+                    if (pos == std::string::npos) continue;
+
+                    std::string file_id = line.substr(0, pos);
+                    std::string file_pw = line.substr(pos + 1);
+
+                    // 윈도우 CR 제거 가능성 처리
+                    if (!file_pw.empty() && file_pw.back() == '\r') file_pw.pop_back();
+
+                    if (file_id == recvID && file_pw == recvPW) {
+                        found = true;
+                        break;
+                    }
+                }
+                file.close();
+            } else {
+                std::cerr << "Could not open IDPW.txt for login verification." << std::endl;
+            }
+
+            // 응답 패킷 생성 및 전송 (성공이면 success=1, 실패면 0)
             PacketLoginResult resPkt;
-
-            resPkt.success = 1; // 성공
-            strcpy_s(resPkt.message, "Login Success");
-
-            // 클라이언트 ID 할당
+            resPkt.success = found ? 1 : 0;
             resPkt.myPlayerID = context->playerID;
+            if (found) {
+                strcpy_s(resPkt.message, "Login Success");
+                std::cout << "Player " << playerID << " Logged in." << std::endl;
+            } else {
+                strcpy_s(resPkt.message, "Login Failed");
+                std::cout << "Player " << playerID << " login failed." << std::endl;
+            }
 
+            // 전체 구조체를 그대로 전송 (header는 이미 네트워크 바이트 오더로 초기화되어 있음)
             send(sock, (char*)&resPkt, sizeof(PacketLoginResult), 0);
 
-            std::cout << "Player " << playerID << " Logged in." << std::endl;
             break;
         }
 
