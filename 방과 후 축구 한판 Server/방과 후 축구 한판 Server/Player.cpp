@@ -18,9 +18,8 @@ void Player::setPosition(glm::vec3 pos) {
 };
 
 void Player::Move(Ball& ball, bool keeper_has_ball) {
+	this->distance = glm::distance(this->position, ball.getPosition());
 	if (this->has_ball) {
-		this->distance = glm::distance(this->position, ball.getPosition());
-		
 		glm::vec3 distanceVec = this->position - ball.getPosition();
 		distanceVec = glm::normalize(distanceVec);
 
@@ -201,6 +200,28 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 	if (this->position.y == 0.0f) {
 		this->velocity *= FRICTION;
 	}
+	// x와 z 경계에 닿으면 반사 처리
+	if (this->position.x < -20.0f) {
+		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+		this->acceleration = this->acceleration * -1.0f;
+		this->position.x = -19.5f;
+	}
+	else if (this->position.x > 20.0f) {
+		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+		this->acceleration = this->acceleration * -1.0f;
+		this->position.x = 19.5f;
+	}
+
+	if (this->position.z < -40.0f) {
+		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+		this->acceleration = this->acceleration * -1.0f;
+		this->position.z = -39.5f;
+	}
+	else if (this->position.z > 40.0f) {
+		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+		this->acceleration = this->acceleration * -1.0f;
+		this->position.z = 39.5f;
+	}
 
 	// 속도를 기준으로 플레이어 위치 업데이트
 	this->position += this->velocity;  // 현재 속도를 반영하여 플레이어 위치 이동
@@ -265,6 +286,7 @@ void Player::Shoot(Ball& ball) {
 			ball.setVelocity(glm::vec3(ball.getVelocity().x, this->shootingpower, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
 		this->shooting = false;
 		this->has_ball = false;
+		ball.changeFirst(false);
 	}
 }
 bool Player::isShooting() { return this->shootingInprogress; };
