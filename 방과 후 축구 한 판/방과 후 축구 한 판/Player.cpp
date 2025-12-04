@@ -52,40 +52,6 @@ void Player::Walk() {
 };
 bool Player::isSprint() { return this->sprint; };
 
-void Player::Shoot(Ball& ball) {
-	if (this->shootingInprogress && distance <= 1.5f) {
-		if (this->strong)
-			this->shootingpower = 100.f;
-		else
-			this->shootingpower += this->shooting_increase;
-		if (!this->strong && this->shootingpower > this->max_shootingpower) {
-			this->shootingpower = this->max_shootingpower;
-		}
-	}
-
-	if (this->shootingInprogress) {
-		if (ball.getPosition().y == 0.0f) {  // 공이 바닥에 있을 때만 발사
-			ball.setVelocity(glm::normalize(ball.getVelocity()) * this->shootingpower);  // 슈팅 파워 적용
-			ssystem->playSound(s_shoot, 0, false, &c_shoot);
-
-			if (this->curve) {
-				ball.changeCurve();
-				ball.setVelocity(glm::vec3(ball.getVelocity().x + 0.5f, this->shootingpower / 2.0f, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
-			}
-			else if (this->strong) {
-				ball.changeStrong();
-			}
-			else	
-				ball.setVelocity(glm::vec3(ball.getVelocity().x, this->shootingpower / 200.0f, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
-			
-			
-		}
-		this->shootingpower = 0.0f;  // 슈팅 파워 초기화
-		this->shootingInprogress = false;  // 슈팅 진행 중 상태 초기화
-	}
-	this->has_ball = false;
-}
-
 bool Player::isShooting() { return this->shootingInprogress; };
 void Player::changeShooting(bool shootinginprogress) {
 	this->shootingInprogress = !this->shootingInprogress;

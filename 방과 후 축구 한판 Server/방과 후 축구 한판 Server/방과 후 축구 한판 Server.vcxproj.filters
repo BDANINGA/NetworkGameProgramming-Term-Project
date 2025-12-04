@@ -33,9 +33,6 @@
     <ClCompile Include="Ball.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
     <ClCompile Include="function.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -46,9 +43,6 @@
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="Keeper.cpp">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="network.cpp">
@@ -68,13 +62,7 @@
     <ClInclude Include="Ball.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>헤더 파일\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Keeper.h">
-      <Filter>헤더 파일\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
