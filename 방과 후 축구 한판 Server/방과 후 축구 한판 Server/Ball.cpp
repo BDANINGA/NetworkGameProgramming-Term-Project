@@ -74,6 +74,8 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->acceleration = 0.f;
+		this->rotationAngle = 0.0f;
+		this->first = false;
 	}
 	else
 	{
@@ -103,6 +105,8 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 			this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 			this->velocity *= 0.f;
 			this->acceleration = 0.f;
+			this->rotationAngle = 0.0f;
+			this->first = false;
 		}
 	}
 	// 중력 적용
@@ -151,22 +155,26 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // 공이 멈추면 회전도 멈춤
+		this->first = false;
 	}
 	else if (this->position.x > 20.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // 공이 멈추면 회전도 멈춤
+		this->first = false;
 	}
 
 	if (this->position.z < -40.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // 공이 멈추면 회전도 멈춤
+		this->first = false;
 	}
 	else if (this->position.z > 40.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // 공이 멈추면 회전도 멈춤
+		this->first = false;
 	}
 
 	// 회전 각도 업데이트 (공의 진행 방향에 비례)

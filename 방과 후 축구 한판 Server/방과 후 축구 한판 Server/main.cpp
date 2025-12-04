@@ -22,12 +22,11 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     Ball ball(0, 0, 0);
     Keeper keeper(0, 0, -32);
 
-    // 플레이어 초기 위치 설정 - (수정 필요)
+    // 플레이어 초기 위치
     for (int i = 0; i < MAX_PLAYERS; ++i) {
         glm::vec3 random_DirVec = randomDir_xz();
         random_DirVec.y = 0;
         players[i].setPosition(random_DirVec * 10.0f);
-        std::cout << players[i].getPosition().x << players[i].getPosition().y << players[i].getPosition().z <<std::endl;
     }
 
     // 시작 시간 설정
