@@ -26,7 +26,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     for (int i = 0; i < MAX_PLAYERS; ++i) {
         glm::vec3 random_DirVec = randomDir_xz();
         random_DirVec.y = 0;
-        players[i].setPosition(random_DirVec * 10.0f);
+        players[i].setPosition(random_DirVec * 15.0f);
     }
 
     // 시작 시간 설정
