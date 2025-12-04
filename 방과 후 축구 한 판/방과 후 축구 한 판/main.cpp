@@ -1,7 +1,6 @@
 //--- 메인 함수
 #include "방과후 축구한판_Client.h"
 
-#define SERVERIP   "127.0.0.1"
 #define SERVERPORT 9000
 
 // --- 네트워크 통신용 전역 변수 ---
@@ -44,6 +43,9 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 		std::cerr << "WSAStartup failed" << std::endl;
 
+	char* serverip = new char[64];
+	std::cout << "ServerIP: ";
+	std::cin >> serverip;
 	srand(time(NULL));
 	width = 1200;
 	height = 800;
@@ -61,7 +63,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	make_fragmentShaders(); //--- 프래그먼트 세이더 만들기
 	shaderProgramID = make_shaderProgram(); //--- 세이더 프로그램 만들기
 
-	if (!ConnectToServer(g_ServerSocket, SERVERIP, SERVERPORT)) {
+	if (!ConnectToServer(g_ServerSocket, serverip, SERVERPORT)) {
 		std::cout << "faild to ConnectToServer" << std::endl;
 		return;
 	}
