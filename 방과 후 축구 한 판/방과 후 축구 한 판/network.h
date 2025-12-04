@@ -1,7 +1,7 @@
 #pragma once
 #include "Packet.h"
 
-#define MAX_PLAYERS 2
+#define MAX_PLAYERS 3
 
 extern int g_CurrentScores[MAX_PLAYERS];
 extern int g_SecondsRemaining;

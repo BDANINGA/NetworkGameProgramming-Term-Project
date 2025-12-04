@@ -11,7 +11,7 @@ bool checkSegmentCollision(glm::vec3 start, glm::vec3 end, glm::vec3 goalPos, gl
 void TimerFunction(int value);
 
 // Gameover - GameSessionLoop()함수 안에서 시간을 체크함.
-void Gameover(time_t time, SOCKET socket);
+void Gameover(SOCKET socket);
 
 // UpdateScore - 11.28일 구현
 void UpdateScore();

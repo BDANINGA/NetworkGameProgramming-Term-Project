@@ -1,7 +1,8 @@
 #pragma once
 #include "Packet.h"
 
-#define MAX_PLAYERS 2
+#define MAX_PLAYERS 3
+#define ENDTIME 300
 
 extern PacketInputkey g_LatestInputKey[MAX_PLAYERS];
 extern PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];

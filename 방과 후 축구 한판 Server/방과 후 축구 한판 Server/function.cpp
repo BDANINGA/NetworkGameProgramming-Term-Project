@@ -59,12 +59,10 @@ void TimerFunction(int value)
 }
 
 // Gameover - GameSessionLoop()함수 안에서 시간을 체크함.
-void Gameover(time_t time, SOCKET socket) {
-    if (time >= 300) {    // 5분
+void Gameover(SOCKET socket) {
         UpdateScore();
         send_gameover(socket);
         ReturntoLogin();
-    }
 }
 
 // UpdateScore - 11.28일 구현

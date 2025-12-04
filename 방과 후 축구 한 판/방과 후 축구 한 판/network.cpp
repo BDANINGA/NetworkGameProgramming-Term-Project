@@ -104,10 +104,13 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
         }
         case PKT_GAMEOVER:
         {
-            if (!RecvTCP(sock, (char*)&gameover + sizeof(PacketHeader), header.size)) {
+            PacketGameover gameoverPkt;
+            if (!RecvTCP(sock, (char*)&gameoverPkt + sizeof(PacketHeader), header.size)) {
                 std::cout << "error_recv: gameover" << std::endl;
                 break;
             }
+            gameover = gameoverPkt.gameover;
+            std::cout << gameover << std::endl;
             break;
         }
         default:

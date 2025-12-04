@@ -85,12 +85,6 @@ void GameSessionLoop(SOCKET clientSockets[]) {
 
         TackleEvent(players, MAX_PLAYERS, ball);
 
-        // 충돌 및 골, 시간 종료 등
-        for (int i = 0; i < MAX_PLAYERS; i++) {
-            Gameover(time(NULL) - startTime, clientSockets[i]);
-        }
-
-
         // --- 데이터 채우기/보내기 ---
 
         // 3명의 플레이어 데이터 채우기
@@ -114,7 +108,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         }
 
         // 남은 시간 데이터 채우기
-        statePkt.remainingTime = 300 - (time(NULL) - startTime);
+        statePkt.remainingTime = ENDTIME - (time(NULL) - startTime);
 
         // 모든 클라이언트에게 'send' 
         for (int i = 0; i < MAX_PLAYERS; i++) {
@@ -123,6 +117,14 @@ void GameSessionLoop(SOCKET clientSockets[]) {
             }
         }
         
+        // 게임 종료
+        if (ENDTIME - (time(NULL) - startTime) == 0) {
+            for (int i = 0; i < MAX_PLAYERS; i++) {
+                Gameover(clientSockets[i]);
+            }
+            break;
+        }
+
         Sleep(1);
     }
 }

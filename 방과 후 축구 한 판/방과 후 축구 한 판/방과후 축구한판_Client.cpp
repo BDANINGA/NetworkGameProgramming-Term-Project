@@ -20,7 +20,7 @@ extern SOCKET g_ServerSocket;
 // 점수 sprintf
 char scoreString[128];
 int g_CurrentScores[MAX_PLAYERS]{};
-int g_SecondsRemaining{ 300 };
+int g_SecondsRemaining{};
 
 extern int g_MyPlayerID;
 
@@ -205,17 +205,17 @@ GLvoid gameoverScene() {
 	drawGoal(vao_goalpost);
 	drawBackground();
 
-	drawText(width / 2, height - 30, "스코어");
-	drawText(width / 5 * 2, height - 80, scoreString);
-	drawText(width / 2, height - 130, "승리한 플레이어");
-	drawText(width / 2, height - 180, "Player1");
+	drawText((width / 2) - 25.0f, height - 30, "Score");
+	drawText((width / 5) * 2 + 30.0f, height - 80, scoreString);
+	drawText((width / 2) - 40.0f, height - 130, "WinPlayer");
+	drawText((width / 2) - 30.0f, height - 180, "Player1");
 
-	drawText(50, height - 230, "P1 경기 전적");
-	drawText(50, height - 280, "x전 y승 z패 승률: xx");
-	drawText(50, height - 330, "P2 경기 전적");
-	drawText(50, height - 380, "x전 y승 z패 승률: xx");
-	drawText(50, height - 430, "P3 경기 전적");
-	drawText(50, height - 480, "x전 y승 z패 승률: xx");
+	drawText(100, height - 230, "P1 경기 전적");
+	drawText(100, height - 280, "match: x, Win: y, Lose: z, Winrate: xx");
+	drawText(100, height - 330, "P2 경기 전적");
+	drawText(100, height - 380, "match: x, Win: y, Lose: z, Winrate: xx");
+	drawText(100, height - 430, "P3 경기 전적");
+	drawText(100, height - 480, "match: x, Win: y, Lose: z, Winrate: xx");
 
 
 	camera.setPosition(glm::vec3(0.0f, 1.0f, 5.0f)); 
