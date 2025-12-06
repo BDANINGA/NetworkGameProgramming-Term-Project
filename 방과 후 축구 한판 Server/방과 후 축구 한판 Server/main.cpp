@@ -37,6 +37,8 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     //PacketRenderData 준비
     PacketRenderData statePkt;
 
+    InitializeCriticalSection(&g_InputLock);
+
     std::cout << "--- Game Loop Started ---" << std::endl;
 
     // --- 메인 루프 시작 ---
@@ -45,9 +47,12 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         PacketInputkey playerKeys[MAX_PLAYERS];
         PacketInputspecialkey playerSpecialKeys[MAX_PLAYERS];
 
+        EnterCriticalSection(&g_InputLock);
+
         memcpy(playerKeys, g_LatestInputKey, sizeof(g_LatestInputKey));
         memcpy(playerSpecialKeys, g_LatestInputSpecialKey, sizeof(g_LatestInputSpecialKey));
 
+        LeaveCriticalSection(&g_InputLock);
 
         // 저장된 최신 데이터로 연산 (게임 로직)
 
