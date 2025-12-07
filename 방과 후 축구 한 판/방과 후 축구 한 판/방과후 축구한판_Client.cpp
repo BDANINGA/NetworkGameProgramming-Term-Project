@@ -96,12 +96,12 @@ GLvoid drawScene() {
 			int id_len = strlen(MyLogin.userID);
 			drawRect2D(50.0f, 90.0f, 300.0f, 300.0f, 0.0f, 0.0f, 0.0f, 0.5f);
 			drawRect2D(50.0f, 90.0f, 300.0f, 30.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-			drawText(50.0f, 100.0f, chatmessage.message + id_len + 2);
+			drawText(50.0f, 100.0f, chatmessage.message + id_len + 2, 50.0f, 350.0f, 400.0f, 700.0f);
 		}
 
 		// BroadCastChatMessage
 		for (int i = 0; i < 9; i++)
-			drawText(50.0f, 130.0f + 30.0f * i, BroadCastChatMessage[i]);
+			drawText(50.0f, 130.0f + 30.0f * i, BroadCastChatMessage[i], 50.0f, 350.0f, 400.0f, 700.0f);
 	}
 	glutSwapBuffers(); // 화면에 출력하기
 }
