@@ -7,6 +7,8 @@
 extern PacketInputkey g_LatestInputKey[MAX_PLAYERS];
 extern PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];
 extern PacketGameReady g_GameReady[MAX_PLAYERS];
+extern PacketChatMessage g_ChatMessage[MAX_PLAYERS];
+extern char BroadCastChatMessage[9][256];
 
 // --- 스레드에 넘겨줄 인수 ---
 struct ClientContext {

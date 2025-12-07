@@ -16,6 +16,8 @@ PacketInputkey input{};
 PacketInputspecialkey s_input{};
 PacketRenderData renderData;
 PacketChatMessage chatmessage{};
+extern PacketLogin MyLogin;
+
 extern SOCKET g_ServerSocket;
 
 GameState g_GameState = STATE_LOGIN; // 초기 상태는 로그인
@@ -26,6 +28,7 @@ GLuint g_TexLoginBack = 0;           // 로그인 배경 텍스처 ID
 char scoreString[128];
 int g_CurrentScores[MAX_PLAYERS]{};
 int g_SecondsRemaining{};
+char BroadCastChatMessage[9][256]{};
 
 extern int g_MyPlayerID;
 
@@ -90,10 +93,15 @@ GLvoid drawScene() {
 		drawText(width - 250, height - 30, scoreString); // 우측 상단
 
 		if (chat) {
+			int id_len = strlen(MyLogin.userID);
 			drawRect2D(50.0f, 90.0f, 300.0f, 300.0f, 0.0f, 0.0f, 0.0f, 0.5f);
 			drawRect2D(50.0f, 90.0f, 300.0f, 30.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-			drawText(50.0f, 100.0f, chatmessage.message);
+			drawText(50.0f, 100.0f, chatmessage.message + id_len + 2);
 		}
+
+		// BroadCastChatMessage
+		for (int i = 0; i < 9; i++)
+			drawText(50.0f, 130.0f + 30.0f * i, BroadCastChatMessage[i]);
 	}
 	glutSwapBuffers(); // 화면에 출력하기
 }
@@ -106,21 +114,25 @@ GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
 void Keyboard(unsigned char key, int x, int y) {
 	if (chat) {
 		int len = strlen(chatmessage.message);
+		int id_len = strlen(MyLogin.userID);
 		if (key == 8) {
-			if (len > 0)
+			if (len > id_len + 2)
 				chatmessage.message[len - 1] = '\0';
 		}
 		else if (key == '\r') {
+			if (chatmessage.message[id_len + 2] != '\0')
+				PlayerChat(chatmessage, g_ServerSocket);
 			chatmessage.message[0] = '\0';
 			chat = false;
 		}
-		else {
+		else if (len < 255){
 			chatmessage.message[len] = key;
 			chatmessage.message[len + 1] = '\0';
 		}
 	}
 
 	else {
+		int id_len = strlen(MyLogin.userID);
 		switch (key) {
 		case 'd':
 		case 'D':
@@ -143,6 +155,10 @@ void Keyboard(unsigned char key, int x, int y) {
 			PlayerInput('x', input, g_ServerSocket, true);
 			break;
 		case '\r':
+			strcpy(chatmessage.message, MyLogin.userID);
+			chatmessage.message[id_len] = ':';
+			chatmessage.message[id_len + 1] = ' ';
+			chatmessage.message[id_len + 2] = '\0';
 			chat = true;
 			break;
 		case 'q':

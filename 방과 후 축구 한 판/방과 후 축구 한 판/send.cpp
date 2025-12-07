@@ -33,3 +33,9 @@ void PlayerReady(PacketGameReady& readydata, SOCKET sock, bool ready) {
     if (sent == SOCKET_ERROR)
         std::cerr << "error: PlayerReady()" << std::endl;
 }
+
+void PlayerChat(PacketChatMessage& chatmessage, SOCKET sock) {
+    int sent = send(sock, (char*)&chatmessage, sizeof(PacketChatMessage), 0);
+    if (sent == SOCKET_ERROR)
+        std::cerr << "error: PlayerChat()" << std::endl;
+}

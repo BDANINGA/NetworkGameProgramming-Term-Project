@@ -5,6 +5,7 @@
 
 extern int g_CurrentScores[MAX_PLAYERS];
 extern int g_SecondsRemaining;
+extern char BroadCastChatMessage[9][256];
 
 // --- connectÇÔ¼ö ---
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port);
@@ -25,3 +26,5 @@ bool RecvTCP(SOCKET sock, char* buffer, int size);
 void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw, bool regist);
 
 void PlayerReady(PacketGameReady& readydata, SOCKET sock, bool ready);
+
+void PlayerChat(PacketChatMessage& chatmessage, SOCKET sock);

@@ -189,6 +189,17 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
             }
             break;
         }
+        case PKT_CHAT_MESSAGE:
+            if (!RecvTCP(sock, (char*)&g_ChatMessage[playerID] + sizeof(PacketHeader), header.size)) {
+                std::cout << "error_recv: chatmessage" << std::endl;
+                break;
+            }
+            for (int i = 8; i > 0; i--) {
+                strcpy_s(BroadCastChatMessage[i], BroadCastChatMessage[i - 1]);
+            }
+            strcpy_s(BroadCastChatMessage[0], g_ChatMessage[playerID].message);
+            
+            break;
 
         default: {
             // 패킷 헤더 식별 실패

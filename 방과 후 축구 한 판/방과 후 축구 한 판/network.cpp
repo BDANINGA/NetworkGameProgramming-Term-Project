@@ -10,6 +10,7 @@ extern Keeper keeper;
 
 int g_MyPlayerID = 0;
 
+PacketLogin MyLogin;
 bool loginResult;
 
 extern GameState g_GameState; // 초기 상태는 로그인
@@ -62,7 +63,6 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
         char choice;
         std::cin >> choice;
 
-        PacketLogin MyLogin;
         char userID[32], userPW[32];
         PacketLoginResult loginResult;
         switch (choice)
@@ -131,6 +131,9 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
                 g_CurrentScores[i] = renderData.playerScore[i];
             }
             g_SecondsRemaining = renderData.remainingTime;
+
+            for (int i = 0; i < 9; i++)
+                strcpy_s(BroadCastChatMessage[i], renderData.BroadCastChatMessage[i]);
 
             break;
         }

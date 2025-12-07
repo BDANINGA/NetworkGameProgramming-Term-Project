@@ -9,6 +9,10 @@
 PacketInputkey g_LatestInputKey[MAX_PLAYERS];
 PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];
 PacketGameReady g_GameReady[MAX_PLAYERS];
+PacketChatMessage g_ChatMessage[MAX_PLAYERS];
+
+// 채팅메세지 배열
+char BroadCastChatMessage[9][256]{};
 
 // --- 전역 변수 보호용 Lock ---
 CRITICAL_SECTION g_InputLock;
@@ -114,6 +118,10 @@ void GameSessionLoop(SOCKET clientSockets[]) {
 
         // 남은 시간 데이터 채우기
         statePkt.remainingTime = ENDTIME - (time(NULL) - startTime);
+
+        // BroadCastChatMessage
+        for (int i = 0; i < 9; i++)
+            strcpy_s(statePkt.BroadCastChatMessage[i], BroadCastChatMessage[i]);
 
         // 모든 클라이언트에게 'send' 
         for (int i = 0; i < MAX_PLAYERS; i++) {
