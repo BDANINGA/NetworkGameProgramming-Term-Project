@@ -104,23 +104,24 @@ GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
 
 // 조작
 void Keyboard(unsigned char key, int x, int y) {
-	std::cout << chat << std::endl;
 	if (chat) {
 		int len = strlen(chatmessage.message);
 		if (key == 8) {
 			if (len > 0)
 				chatmessage.message[len - 1] = '\0';
 		}
+		else if (key == '\r') {
+			chatmessage.message[0] = '\0';
+			chat = false;
+		}
 		else {
 			chatmessage.message[len] = key;
 			chatmessage.message[len + 1] = '\0';
 		}
-		std::cout << chatmessage.message << std::endl;	
 	}
 
 	else {
 		switch (key) {
-
 		case 'd':
 		case 'D':
 			PlayerInput('d', input, g_ServerSocket, true);
