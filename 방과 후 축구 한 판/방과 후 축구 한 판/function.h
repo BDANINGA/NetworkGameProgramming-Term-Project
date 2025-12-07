@@ -84,7 +84,7 @@ void projectionTransform();
 void make_Light();
 
 // 인게임 UI 생성
-void drawText(float x, float y, const char* text);
+void drawText(float x, float y, const char* text, float left = 0.0f, float right = width, float bottom = 0.0f, float top = height);
 void drawRect2D(float x, float y, float w, float h,
 	float r, float g, float b, float a);
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------

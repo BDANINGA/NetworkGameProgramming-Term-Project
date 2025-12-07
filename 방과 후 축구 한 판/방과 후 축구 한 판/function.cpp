@@ -472,20 +472,23 @@ void make_Light() {
     glUniform3f(viewPosLocation, light.getViewPos().x, light.getViewPos().y, light.getViewPos().z);
 }
 
-void drawText(float x, float y, const char* text) {
+void drawText(float x, float y, const char* text, float left, float right, float bottom, float top) {
     // 쉐이더 프로그램 해제 (해제 안하면 글씨 검은색 됨)
     glUseProgram(0);
 
     // 조명 및 깊이 테스트 끄기 
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
-    // -----------------------------------------
-
+        
     // 2D 렌더링을 위한 매트릭스 설정
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    gluOrtho2D(0.0, width, 0.0, height);
+    gluOrtho2D(0.0f, width, 0.0f, height);
+
+    // 스크린 좌표 기준으로 가위 영역 설정
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(left, height - top, right - left, top - bottom);
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -506,6 +509,8 @@ void drawText(float x, float y, const char* text) {
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
+
+    glDisable(GL_SCISSOR_TEST);
 
     glUseProgram(shaderProgramID);
     glEnable(GL_DEPTH_TEST);
