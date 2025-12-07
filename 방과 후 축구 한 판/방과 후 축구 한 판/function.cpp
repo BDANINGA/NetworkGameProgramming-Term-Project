@@ -512,6 +512,66 @@ void drawText(float x, float y, const char* text) {
     glEnable(GL_LIGHTING);
 }
 
+void drawRect2D(float x, float y, float w, float h,
+    float r, float g, float b, float a)
+{
+    // 쉐이더 프로그램 해제
+    glUseProgram(0);
+
+    // 조명 및 깊이 테스트 끄기
+    glDisable(GL_LIGHTING);
+    glDisable(GL_DEPTH_TEST);
+
+    // --------------------------------
+    // 알파 블렌딩 활성화
+    // --------------------------------
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // ----------------------------
+    // 2D 렌더링 매트릭스 설정
+    // ----------------------------
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0.0, width, 0.0, height);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // ----------------------------
+    // 사각형 색상
+    // ----------------------------
+    glColor4f(r, g, b, a);
+
+    // ----------------------------
+    // 사각형(Quad) 그리기
+    // 좌하단 기준 (x, y)
+    // ----------------------------
+    glBegin(GL_QUADS);
+    glVertex2f(x, y);
+    glVertex2f(x + w, y);
+    glVertex2f(x + w, y + h);
+    glVertex2f(x, y + h);
+    glEnd();
+
+    // ----------------------------
+    // 매트릭스 복원
+    // ----------------------------
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+
+    // ----------------------------
+    // 원래 상태 복원
+    // ----------------------------
+    glUseProgram(shaderProgramID);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+}
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // 도형 만들기(사용안함)
 void MakeShape(GLfloat arr[][3], GLfloat normal[][3], GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, int first_index, std::string shape) {

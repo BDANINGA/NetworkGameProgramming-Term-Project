@@ -15,6 +15,7 @@ Light light;
 PacketInputkey input{};
 PacketInputspecialkey s_input{};
 PacketRenderData renderData;
+PacketChatMessage chatmessage{};
 extern SOCKET g_ServerSocket;
 
 // 점수 sprintf
@@ -26,6 +27,7 @@ extern int g_MyPlayerID;
 
 //------------------------------------------------------------------------
 bool start = true;
+bool chat = false;
 bool left_button = 0;
 // 렌더링
 GLvoid drawScene() {
@@ -60,8 +62,11 @@ GLvoid drawScene() {
 	drawGoal(vao_goalpost);
 	drawBackground();
 
-	
-
+	if (chat) {
+		drawRect2D(50.0f, height - 100.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f, 0.5f);
+		drawRect2D(50.0f, height - 50.0f, 50.0f, 10.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+		drawText(50.0f, height - 50.0f, chatmessage.message);
+	}
 	// 시간 sprintf
 	int minutes = g_SecondsRemaining / 60;
 	int seconds = g_SecondsRemaining % 60;
@@ -87,32 +92,51 @@ GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
 
 // 조작
 void Keyboard(unsigned char key, int x, int y) {
-	switch (key) {
+	std::cout << chat << std::endl;
+	if (chat) {
+		int len = strlen(chatmessage.message);
+		if (key == 8) {
+			if (len > 0)
+				chatmessage.message[len - 1] = '\0';
+		}
+		else {
+			chatmessage.message[len] = key;
+			chatmessage.message[len + 1] = '\0';
+		}
+		std::cout << chatmessage.message << std::endl;	
+	}
 
-	case 'd':
-	case 'D':
-		PlayerInput('d', input, g_ServerSocket, true);
-		break;
-	case 'e':
-	case 'E':
-		PlayerInput('e', input, g_ServerSocket, true);
-		break;
-	case 'z':
-	case 'Z':
-		PlayerInput('z', input, g_ServerSocket, true);
-		break;
-	case 'c':
-	case 'C':
-		PlayerInput('c', input, g_ServerSocket, true);
-		break;
-	case 'x':
-	case 'X':
-		PlayerInput('x', input, g_ServerSocket, true);
-		break;
-	case 'q':
-		// debug: game_quit
-		glutLeaveMainLoop();
-		break;
+	else {
+		switch (key) {
+
+		case 'd':
+		case 'D':
+			PlayerInput('d', input, g_ServerSocket, true);
+			break;
+		case 'e':
+		case 'E':
+			PlayerInput('e', input, g_ServerSocket, true);
+			break;
+		case 'z':
+		case 'Z':
+			PlayerInput('z', input, g_ServerSocket, true);
+			break;
+		case 'c':
+		case 'C':
+			PlayerInput('c', input, g_ServerSocket, true);
+			break;
+		case 'x':
+		case 'X':
+			PlayerInput('x', input, g_ServerSocket, true);
+			break;
+		case '\r':
+			chat = true;
+			break;
+		case 'q':
+			// debug: game_quit
+			glutLeaveMainLoop();
+			break;
+		}
 	}
 	glutPostRedisplay();
 }
