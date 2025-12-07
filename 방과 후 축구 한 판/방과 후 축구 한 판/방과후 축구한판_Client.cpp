@@ -17,6 +17,10 @@ PacketInputspecialkey s_input{};
 PacketRenderData renderData;
 extern SOCKET g_ServerSocket;
 
+GameState g_GameState = STATE_LOGIN; // 초기 상태는 로그인
+GLuint g_TexLoginBack = 0;           // 로그인 배경 텍스처 ID
+
+
 // 점수 sprintf
 char scoreString[128];
 int g_CurrentScores[MAX_PLAYERS]{};
@@ -34,47 +38,57 @@ GLvoid drawScene() {
 		start = false;
 		loadObj();
 		InitBuffer();
+		g_TexLoginBack = loadBMP("FootBall_Login_Scene.bmp"); // [필수] 이미지 로드
 	}
 
-	//--- 변경된 배경색 설정
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glUseProgram(shaderProgramID);
-	glEnable(GL_DEPTH_TEST);   // 깊이 테스트 활성화
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	// 카메라 설정: 플레이어를 따라가는 카메라 server로부터 받은 player position으로 받아서 설정
-	camera.setPosition(player[g_MyPlayerID].getPosition() + glm::vec3(0.0f, 1.0f, 5.0f));  // 플레이어 위치 기준으로 카메라 위치 설정 (위 2, 뒤 5)
-	camera.setDirection(player[g_MyPlayerID].getPosition());  // 카메라는 플레이어를 향하도록 설정
+	switch(g_GameState){
+	case STATE_LOGIN:
+		Draw2DBackground();
+		break;
 
-	viewTransform();
-	projectionTransform();
-	make_Light();
+	case STATE_GAME:
+		//--- 변경된 배경색 설정
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	ball.Draw(vao_ball);						// server로부터 position, rotationAngle, rotation을 받으면 된다.
-	for (int i = 0; i < MAX_PLAYERS; ++i) {
-		player[i].Draw(vao_player);									// server로부터 position, rotation을 받으면 된다.
-		keeper.Draw(vao_player);					// server로부터 position을 받으면 된다.
+		glUseProgram(shaderProgramID);
+		glEnable(GL_DEPTH_TEST);   // 깊이 테스트 활성화
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		// 카메라 설정: 플레이어를 따라가는 카메라 server로부터 받은 player position으로 받아서 설정
+		camera.setPosition(player[g_MyPlayerID].getPosition() + glm::vec3(0.0f, 1.0f, 5.0f));  // 플레이어 위치 기준으로 카메라 위치 설정 (위 2, 뒤 5)
+		camera.setDirection(player[g_MyPlayerID].getPosition());  // 카메라는 플레이어를 향하도록 설정
+
+		viewTransform();
+		projectionTransform();
+		make_Light();
+
+		ball.Draw(vao_ball);						// server로부터 position, rotationAngle, rotation을 받으면 된다.
+		for (int i = 0; i < MAX_PLAYERS; ++i) {
+			player[i].Draw(vao_player);									// server로부터 position, rotation을 받으면 된다.
+			keeper.Draw(vao_player);					// server로부터 position을 받으면 된다.
+		}
+		drawGoal(vao_goalpost);
+		drawBackground();
+
+
+
+		// 시간 sprintf
+		int minutes = g_SecondsRemaining / 60;
+		int seconds = g_SecondsRemaining % 60;
+		char timeString[32];
+		sprintf(timeString, "TIME %02d:%02d", minutes, seconds);
+
+
+		sprintf(scoreString, "P1: %d  P2: %d  P3: %d",
+			g_CurrentScores[0], g_CurrentScores[1], g_CurrentScores[2]);
+
+		// 텍스트 그리기 
+		drawText(10, height - 30, timeString); // 좌측 상단
+		drawText(width - 250, height - 30, scoreString); // 우측 상단
 	}
-	drawGoal(vao_goalpost);
-	drawBackground();
-
-	
-
-	// 시간 sprintf
-	int minutes = g_SecondsRemaining / 60;
-	int seconds = g_SecondsRemaining % 60;
-	char timeString[32];
-	sprintf(timeString, "TIME %02d:%02d", minutes, seconds);
-
-	
-	sprintf(scoreString, "P1: %d  P2: %d  P3: %d",
-		g_CurrentScores[0], g_CurrentScores[1], g_CurrentScores[2]);
-
-	// 텍스트 그리기 
-	drawText(10, height - 30, timeString); // 좌측 상단
-	drawText(width - 250, height - 30, scoreString); // 우측 상단
 
 	
 	glutSwapBuffers(); // 화면에 출력하기
@@ -88,7 +102,6 @@ GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
 // 조작
 void Keyboard(unsigned char key, int x, int y) {
 	switch (key) {
-
 	case 'd':
 	case 'D':
 		PlayerInput('d', input, g_ServerSocket, true);
@@ -231,3 +244,47 @@ void UI_Update() {
 	if (gameover) gameoverScene();
 	else drawScene();
 }
+
+// --- 2D 배경 이미지 그리기 함수 ---
+void Draw2DBackground() {
+	if (g_TexLoginBack == 0) return;
+
+	// 3D 설정 끄기
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glUseProgram(0); // 쉐이더 끄기
+
+	// 2D 모드 전환
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, width, 0, height); // 화면 크기에 맞춤
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	// 텍스처 활성화 및 그리기
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, g_TexLoginBack);
+	glColor3f(1, 1, 1); // 원래 색상 유지
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0); glVertex2f(0, 0);           // 좌하
+	glTexCoord2f(1, 0); glVertex2f(width, 0);       // 우하
+	glTexCoord2f(1, 1); glVertex2f(width, height);  // 우상
+	glTexCoord2f(0, 1); glVertex2f(0, height);      // 좌상
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+
+	// 3D 설정 복구
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glEnable(GL_DEPTH_TEST);
+}
+
+
+
