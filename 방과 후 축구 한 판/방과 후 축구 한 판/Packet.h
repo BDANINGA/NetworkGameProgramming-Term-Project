@@ -80,6 +80,7 @@ struct PacketInputspecialkey {
 
 struct PacketLogin {
 	PacketHeader header{ htons(PKT_LOGIN), htons(sizeof(PacketLogin) - sizeof(PacketHeader)) };
+	bool isRegister; // true: 회원가입, false: 로그인
 	char userID[32];
 	char userPW[32];
 };

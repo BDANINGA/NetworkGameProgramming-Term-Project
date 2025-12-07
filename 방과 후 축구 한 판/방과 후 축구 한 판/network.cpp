@@ -1,5 +1,6 @@
 #include "network.h"
 #include "Keeper.h"
+#include "방과후 축구한판_Client.h"
 
 extern bool gameover;
 extern PacketRenderData renderData;
@@ -10,6 +11,8 @@ extern Keeper keeper;
 int g_MyPlayerID = 0;
 
 bool loginResult;
+
+extern GameState g_GameState; // 초기 상태는 로그인
 
 
 // --- connect함수 ---
@@ -47,6 +50,53 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 {
     SOCKET sock = (SOCKET)lpParam;
     PacketHeader header;
+
+    Sleep(3000);
+
+
+    //--- 로그인 처리 ---
+    bool loginSuccess = false;
+    do
+    {
+        std::cout << "1. 로그인" << std::endl << "2. 회원가입" << std::endl;
+        char choice;
+        std::cin >> choice;
+
+        PacketLogin MyLogin;
+        char userID[32], userPW[32];
+        PacketLoginResult loginResult;
+        switch (choice)
+        {
+        case '1':
+            std::cout << "ID, PW 입력:" << std::endl;
+            std::cin >> userID >> userPW;
+            PlayerLogin(MyLogin, sock, userID, userPW, false);
+
+            recv(sock, (char*)&loginResult, sizeof(PacketLoginResult), 0);
+            std::cout << loginResult.message << std::endl;
+            if (loginResult.success) {
+                loginSuccess = true;
+            }
+            break;
+        case '2':
+            std::cout << "ID, PW 입력:" << std::endl;
+            std::cin >> userID >> userPW;
+            PlayerLogin(MyLogin, sock, userID, userPW, true);
+            break;
+        default:
+            std::cout << "잘못된 입력입니다." << std::endl;
+            break;
+        }
+
+        std::cout << std::endl;
+    } while (!loginSuccess);
+
+    PacketGameReady readyData;
+    PlayerReady(readyData, sock, true);
+
+    g_GameState = STATE_GAME;
+
+
     while (true)
     {
         // 헤더 수신

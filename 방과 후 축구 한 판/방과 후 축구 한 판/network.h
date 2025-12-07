@@ -22,6 +22,6 @@ bool RecvTCP(SOCKET sock, char* buffer, int size);
 
 bool RecvTCP(SOCKET sock, char* buffer, int size);
 
-void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw);
+void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw, bool regist);
 
 void PlayerReady(PacketGameReady& readydata, SOCKET sock, bool ready);

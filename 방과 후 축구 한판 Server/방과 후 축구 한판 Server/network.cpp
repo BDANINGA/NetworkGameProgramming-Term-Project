@@ -124,6 +124,20 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
 
             bool found = false;
 
+            if(loginPkt.isRegister) {
+                // 회원가입 처리
+                std::ofstream file("IDPW.txt", std::ios::app);
+                if (file.is_open()) {
+                    file << std::endl << recvID << " " << recvPW;
+                    file.close();
+                    std::cout << "Player " << playerID << " Registered with ID: " << recvID << std::endl;
+                } else {
+                    std::cerr << "Could not open IDPW.txt for registration." << std::endl;
+                }
+
+                break;
+			}
+
             std::ifstream file("IDPW.txt");
             if (file.is_open()) {
                 std::string line;
@@ -167,10 +181,9 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
             break;
         }
 
-                      // 3명의 플레이어가 들어왔는지 확인
+            // 3명의 플레이어가 들어왔는지 확인
         case PKT_GAME_READY: {
-			PacketGameReady GameReady;
-            if (!RecvTCP(sock, (char*)&GameReady + sizeof(PacketHeader), header.size)) {
+            if (!RecvTCP(sock, (char*)&g_GameReady[playerID] + sizeof(PacketHeader), header.size)) {
                 std::cout << "error_recv: gameready" << std::endl;
                 break;
             }

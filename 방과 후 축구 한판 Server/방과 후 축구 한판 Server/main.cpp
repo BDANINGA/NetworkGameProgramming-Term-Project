@@ -8,12 +8,12 @@
 // --- 사용할 전역 변수 ---
 PacketInputkey g_LatestInputKey[MAX_PLAYERS];
 PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];
+PacketGameReady g_GameReady[MAX_PLAYERS];
 
 // --- 전역 변수 보호용 Lock ---
 CRITICAL_SECTION g_InputLock;
 
 uint16_t currentScore[3]{ 0,0,0 };
-
 
 void GameSessionLoop(SOCKET clientSockets[]) {
 
@@ -37,6 +37,8 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     //PacketRenderData 준비
     PacketRenderData statePkt;
 
+    InitializeCriticalSection(&g_InputLock);
+
     std::cout << "--- Game Loop Started ---" << std::endl;
 
     // --- 메인 루프 시작 ---
@@ -45,9 +47,12 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         PacketInputkey playerKeys[MAX_PLAYERS];
         PacketInputspecialkey playerSpecialKeys[MAX_PLAYERS];
 
+        EnterCriticalSection(&g_InputLock);
+
         memcpy(playerKeys, g_LatestInputKey, sizeof(g_LatestInputKey));
         memcpy(playerSpecialKeys, g_LatestInputSpecialKey, sizeof(g_LatestInputSpecialKey));
 
+        LeaveCriticalSection(&g_InputLock);
 
         // 저장된 최신 데이터로 연산 (게임 로직)
 
@@ -129,7 +134,6 @@ void GameSessionLoop(SOCKET clientSockets[]) {
     }
 }
 
-
 int main() {
 
     // --- 리슨 소켓 설정 ---
@@ -167,8 +171,23 @@ int main() {
         }
     }
 
-    std::cout << "All players connected. Game Start..." << std::endl;
+
+    std::cout << "All players connected." << std::endl;
     closesocket(listenSocket);
+
+    while (true)
+    {
+        bool allReady = true;
+        for (int i = 0; i < MAX_PLAYERS; i++) {
+            if (!g_GameReady[i].ready) {
+                allReady = false;
+                break;
+            }
+        }
+        if (allReady) break;
+		Sleep(100);
+
+    }
 
     // --- 메인 스레드 안에서 게임 루프 실행 ---
     GameSessionLoop(clientSockets);
