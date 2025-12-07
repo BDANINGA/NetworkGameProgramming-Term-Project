@@ -68,8 +68,6 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 		return;
 	}
 
-
-
 	if (!CreateThread(NULL, 0, ClientNetworkThread, (LPVOID)g_ServerSocket, 0, NULL)) {
 		std::cout << "faild to CreateThread: ClientNetworkThread" << std::endl;
 		return;

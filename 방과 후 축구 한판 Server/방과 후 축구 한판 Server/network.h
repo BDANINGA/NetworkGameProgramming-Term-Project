@@ -1,11 +1,12 @@
 #pragma once
 #include "Packet.h"
 
-#define MAX_PLAYERS 3
+#define MAX_PLAYERS 2
 #define ENDTIME 300
 
 extern PacketInputkey g_LatestInputKey[MAX_PLAYERS];
 extern PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];
+extern PacketGameReady g_GameReady[MAX_PLAYERS];
 
 // --- 스레드에 넘겨줄 인수 ---
 struct ClientContext {

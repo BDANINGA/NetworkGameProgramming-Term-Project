@@ -86,15 +86,3 @@ glm::vec3 randomDir_xz()
     return glm::normalize(v);
 }
 
-bool RegisterUser(const std::string& userID, const std::string& userPW)
-{
-    std::ofstream file("IDPW.txt", std::ios::app);
-    if (file.is_open()) {
-        file << std::endl << userID << " " << userPW;
-
-		file.close();
-		return true;
-    }
-	
-    return false;
-}

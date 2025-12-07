@@ -18,9 +18,10 @@ void PlayerInput_special(int key_value, PacketInputspecialkey& key, SOCKET sock,
     }
 }
 
-void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw) {
+void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw, bool regist) {
 	strcpy_s(logindata.userID, id);
 	strcpy_s(logindata.userPW, pw);
+	logindata.isRegister = regist;
     int sent = send(sock, (char*)&logindata, sizeof(PacketLogin), 0);
     if (sent == SOCKET_ERROR)
         std::cerr << "error: PlayerLogin()" << std::endl;

@@ -1,7 +1,7 @@
 #pragma once
 #include "Packet.h"
 
-#define MAX_PLAYERS 3
+#define MAX_PLAYERS 2
 
 extern int g_CurrentScores[MAX_PLAYERS];
 extern int g_SecondsRemaining;
@@ -22,6 +22,6 @@ bool RecvTCP(SOCKET sock, char* buffer, int size);
 
 bool RecvTCP(SOCKET sock, char* buffer, int size);
 
-void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw);
+void PlayerLogin(PacketLogin& logindata, SOCKET sock, char* id, char* pw, bool regist);
 
 void PlayerReady(PacketGameReady& readydata, SOCKET sock, bool ready);
