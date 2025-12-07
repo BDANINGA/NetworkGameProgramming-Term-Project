@@ -90,9 +90,9 @@ GLvoid drawScene() {
 		drawText(width - 250, height - 30, scoreString); // 우측 상단
 
 		if (chat) {
-			drawRect2D(50.0f, height - 100.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f, 0.5f);
-			drawRect2D(50.0f, height - 50.0f, 50.0f, 10.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-			drawText(50.0f, height - 50.0f, chatmessage.message);
+			drawRect2D(50.0f, 90.0f, 300.0f, 300.0f, 0.0f, 0.0f, 0.0f, 0.5f);
+			drawRect2D(50.0f, 90.0f, 300.0f, 30.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+			drawText(50.0f, 100.0f, chatmessage.message);
 		}
 	}
 	glutSwapBuffers(); // 화면에 출력하기
