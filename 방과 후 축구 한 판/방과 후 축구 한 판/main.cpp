@@ -68,23 +68,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 		return;
 	}
 
-	//--- 로그인 처리 ---
-	bool loginSuccess = false;
-	do
-	{
-		std::cout << "ID, PW 입력:" << std::endl;
-		PacketLogin MyLogin;
-		char userID[32], userPW[32];
-		std::cin >> userID >> userPW;
-		PlayerLogin(MyLogin, g_ServerSocket, userID, userPW);
 
-		PacketLoginResult loginResult;
-		recv(g_ServerSocket, (char*)&loginResult, sizeof(PacketLoginResult), 0);
-		std::cout << loginResult.message << std::endl;
-		if (loginResult.success) {
-			loginSuccess = true;
-		}
-	} while (!loginSuccess);
 
 	if (!CreateThread(NULL, 0, ClientNetworkThread, (LPVOID)g_ServerSocket, 0, NULL)) {
 		std::cout << "faild to CreateThread: ClientNetworkThread" << std::endl;

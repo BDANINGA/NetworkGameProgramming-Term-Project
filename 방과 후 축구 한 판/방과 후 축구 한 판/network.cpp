@@ -1,5 +1,6 @@
 #include "network.h"
 #include "Keeper.h"
+#include "방과후 축구한판_Client.h"
 
 extern bool gameover;
 extern PacketRenderData renderData;
@@ -10,6 +11,8 @@ extern Keeper keeper;
 int g_MyPlayerID = 0;
 
 bool loginResult;
+
+extern GameState g_GameState; // 초기 상태는 로그인
 
 
 // --- connect함수 ---
@@ -47,6 +50,30 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 {
     SOCKET sock = (SOCKET)lpParam;
     PacketHeader header;
+
+    Sleep(3000);
+
+    //--- 로그인 처리 ---
+    bool loginSuccess = false;
+    do
+    {
+        std::cout << "ID, PW 입력:" << std::endl;
+        PacketLogin MyLogin;
+        char userID[32], userPW[32];
+        std::cin >> userID >> userPW;
+        PlayerLogin(MyLogin, sock, userID, userPW);
+
+        PacketLoginResult loginResult;
+        recv(sock, (char*)&loginResult, sizeof(PacketLoginResult), MSG_WAITALL);
+        std::cout << loginResult.message << std::endl;
+        if (loginResult.success) {
+            loginSuccess = true;
+        }
+    } while (!loginSuccess);
+
+    g_GameState = STATE_GAME;
+
+
     while (true)
     {
         // 헤더 수신
