@@ -1,9 +1,13 @@
 #include "Ball.h"
+#include "Player.h"
 
 // ---------------------------------------------------------------
 // Ball
 
 extern PacketRenderData statePkt;
+
+extern Player players[MAX_PLAYERS];
+
 
 Ball::Ball() {
 	this->rotation = glm::vec3(0.1f, 0.1f, 0.1f);
@@ -112,6 +116,12 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 			this->first = false;
 
 			statePkt.SoundKind[0] = true;
+
+			for (int i = 0; i < MAX_PLAYERS; ++i) {
+				glm::vec3 random_DirVec = randomDir_xz();
+				random_DirVec.y = 0;
+				players[i].setPosition(random_DirVec * 15.0f);
+			}
 
 		}
 	}

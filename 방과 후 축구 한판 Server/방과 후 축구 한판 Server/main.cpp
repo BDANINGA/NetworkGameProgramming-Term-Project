@@ -22,10 +22,11 @@ uint16_t currentScore[3]{ 0,0,0 };
 //PacketRenderData 준비
 PacketRenderData statePkt;
 
+Player players[MAX_PLAYERS];
+
 void GameSessionLoop(SOCKET clientSockets[]) {
 
     // --- 게임 월드(World) 초기화 (수정 필요)---
-    Player players[MAX_PLAYERS];
     Ball ball(0, 0, 0);
     Keeper keeper(0, 0, -32);
 
