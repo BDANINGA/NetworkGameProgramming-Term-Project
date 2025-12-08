@@ -61,11 +61,13 @@ GLvoid drawScene() {
 		Draw2DBackground();
 
 		// 로그인 창
-		drawRect2D(400.0f, 300.0f, 400.0f, 200.0f, 1.0f, 1.0f, 1.0f, 0.8f);	// 창
-		drawRect2D(420.0f, 430.0f, 340.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 아이디 바
-		drawRect2D(420.0f, 330.0f, 340.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 비밀번호 바
-		drawText(420.0f, 450.0f, "ID:");
-		drawText(420.0f, 350.0f, "PW:");
+		drawRect2D(400.0f, 200.0f, 400.0f, 200.0f, 1.0f, 1.0f, 1.0f, 0.8f);	// 창
+		drawRect2D(420.0f, 330.0f, 360.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 아이디 바
+		drawRect2D(420.0f, 230.0f, 360.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 비밀번호 바
+		drawText(425.0f, 350.0f, "ID:");
+		drawText(465.0f, 350.0f, g_InputID); // 입력된 아이디
+		drawText(425.0f, 250.0f, "PW:");
+		drawText(465.0f, 250.0f, g_InputPW); // 입력된 비밀번호
 		break;
 
 	case STATE_GAME:
@@ -161,7 +163,10 @@ void Keyboard(unsigned char key, int x, int y) {
 				else if (key == '\r') // Enter
 				{
 					// 로그인 시도
+					std::cout << "Attempting login with ID: " << g_InputID << " PW: " << g_InputPW << std::endl;
 					PlayerLogin(MyLogin, g_ServerSocket, g_InputID, g_InputPW, false);
+					g_InputID[0] = '\0';
+					g_InputPW[0] = '\0';
 				}
 				else if (len < 31) // 최대 길이 제한
 				{
@@ -265,19 +270,29 @@ void Mouse(int button, int state, int x, int y)
 		if (g_GameState == STATE_LOGIN)
 		{
 			// 아이디 입력창 클릭
-			if (gl_x >= -0.25f && gl_x <= 0.25f && gl_y >= 0.166f && gl_y <= 0.25f)
+			if (gl_x >= -0.3f && gl_x <= 0.3f && gl_y >= 0.07f && gl_y <= 0.19f)
 			{
 				g_LoginCursor = LOGIN_CURSOR_ID;
 			}
 			// 비밀번호 입력창 클릭
-			else if (gl_x >= -0.25f && gl_x <= 0.25f && gl_y >= -0.083f && gl_y <= 0.0f)
+			else if (gl_x >= -0.3f && gl_x <= 0.3f && gl_y >= -0.19f && gl_y <= -0.05f)
 			{
 				g_LoginCursor = LOGIN_CURSOR_PW;
 			}
-			else
-			{
 
+			// 로그인 버튼 클릭
+			else if (gl_x >= -0.25f && gl_x <= 0.25f && gl_y >= -0.9f && gl_y <= -0.7f)
+			{
+				// 로그인 시도
+				std::cout << "Attempting login with ID: " << g_InputID << " PW: " << g_InputPW << std::endl;
+				PlayerLogin(MyLogin, g_ServerSocket, g_InputID, g_InputPW, false);
+				g_InputID[0] = '\0';
+				g_InputPW[0] = '\0';
 			}
+
+			// 클릭 위치(디버그용)
+			//std::cout << "gl_x: " << gl_x << ", gl_y: " << gl_y << std::endl;
+			//std::cout << "Selected Cursor: " << g_LoginCursor << std::endl;
 		}
 	}
 }

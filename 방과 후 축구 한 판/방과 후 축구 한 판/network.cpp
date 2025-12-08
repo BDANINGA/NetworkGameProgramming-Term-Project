@@ -59,37 +59,44 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
     bool loginSuccess = false;
     do
     {
-        std::cout << "1. 로그인" << std::endl << "2. 회원가입" << std::endl;
-        char choice;
-        std::cin >> choice;
-
-        char userID[32], userPW[32];
         PacketLoginResult loginResult;
-        switch (choice)
-        {
-        case '1':
-            std::cout << "ID, PW 입력:" << std::endl;
-            std::cin >> userID >> userPW;
-            PlayerLogin(MyLogin, sock, userID, userPW, false);
-            break;
 
-        case '2':
-            std::cout << "ID, PW 입력:" << std::endl;
-            std::cin >> userID >> userPW;
-            PlayerLogin(MyLogin, sock, userID, userPW, true);
-            break;
-        default:
-            std::cout << "잘못된 입력입니다." << std::endl;
-            break;
-        }
+        //std::cout << "1. 로그인" << std::endl << "2. 회원가입" << std::endl;
+        //char choice;
+        //std::cin >> choice;
 
-        std::cout << std::endl;
+        //char userID[32], userPW[32];
+        //switch (choice)
+        //{
+        //case '1':
+        //    std::cout << "ID, PW 입력:" << std::endl;
+        //    std::cin >> userID >> userPW;
+        //    PlayerLogin(MyLogin, sock, userID, userPW, false);
+        //    break;
+
+        //case '2':
+        //    std::cout << "ID, PW 입력:" << std::endl;
+        //    std::cin >> userID >> userPW;
+        //    PlayerLogin(MyLogin, sock, userID, userPW, true);
+        //    break;
+        //default:
+        //    std::cout << "잘못된 입력입니다." << std::endl;
+        //    break;
+        //}
+
+        //std::cout << std::endl;
 
         recv(sock, (char*)&loginResult, sizeof(PacketLoginResult), 0);
         std::cout << loginResult.message << std::endl;
         if (loginResult.success) {
             loginSuccess = true;
         }
+        else {
+            WCHAR msgText[32];
+			MultiByteToWideChar(CP_ACP, 0, loginResult.message, strlen(loginResult.message), msgText, 32);
+            MessageBox(NULL, msgText, L"Login Info", MB_OK);
+        }
+
         g_MyPlayerID = loginResult.myPlayerID;
 
     } while (!loginSuccess);
