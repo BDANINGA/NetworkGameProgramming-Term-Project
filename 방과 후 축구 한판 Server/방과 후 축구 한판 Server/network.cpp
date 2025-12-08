@@ -126,11 +126,19 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
 
             if(loginPkt.isRegister) {
                 // 회원가입 처리
+
                 std::ofstream file("IDPW.txt", std::ios::app);
                 if (file.is_open()) {
-                    file << std::endl << recvID << " " << recvPW;
+                    file << std::endl << recvID << "/" << recvPW;
                     file.close();
                     std::cout << "Player " << playerID << " Registered with ID: " << recvID << std::endl;
+
+					// 회원가입 성공 응답 패킷 생성 및 전송
+					PacketLoginResult resPkt;
+					resPkt.success = 0;
+					resPkt.myPlayerID = context->playerID;
+					strcpy_s(resPkt.message, "Registration Success");
+                    send(sock, (char*)&resPkt, sizeof(PacketLoginResult), 0);
                 } else {
                     std::cerr << "Could not open IDPW.txt for registration." << std::endl;
                 }
@@ -143,8 +151,7 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
                 std::string line;
                 while (std::getline(file, line)) {
                     if (line.empty()) continue;
-                    // 공백으로 구분된 id pw 예상
-                    auto pos = line.find(' ');
+                    auto pos = line.find('/');
                     if (pos == std::string::npos) continue;
 
                     std::string file_id = line.substr(0, pos);
