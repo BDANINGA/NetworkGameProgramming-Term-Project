@@ -19,6 +19,9 @@ CRITICAL_SECTION g_InputLock;
 
 uint16_t currentScore[3]{ 0,0,0 };
 
+//PacketRenderData 준비
+PacketRenderData statePkt;
+
 void GameSessionLoop(SOCKET clientSockets[]) {
 
     // --- 게임 월드(World) 초기화 (수정 필요)---
@@ -38,8 +41,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
 
     // 게임 스코어 초기화
 
-    //PacketRenderData 준비
-    PacketRenderData statePkt;
+
 
     InitializeCriticalSection(&g_InputLock);
 
@@ -129,7 +131,10 @@ void GameSessionLoop(SOCKET clientSockets[]) {
                 std::cerr << "Send failed to player " << i << std::endl;
             }
         }
-        
+        for (int i = 0; i < 3; ++i) {
+            statePkt.SoundKind[i] = false;
+        }
+
         // 게임 종료
         if (ENDTIME - (time(NULL) - startTime) == 0) {
             for (int i = 0; i < MAX_PLAYERS; i++) {

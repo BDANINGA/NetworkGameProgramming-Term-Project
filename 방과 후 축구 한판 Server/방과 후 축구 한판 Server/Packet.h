@@ -62,6 +62,7 @@ struct PacketRenderData {
 	uint8_t playerScore[3];
 	time_t remainingTime;
 	char BroadCastChatMessage[9][256]{};
+	bool SoundKind[3] = {false, false, false};
 };
 
 struct PacketGameover {

@@ -1,6 +1,6 @@
 #include "network.h"
 #include "Keeper.h"
-#include "¹æ°úÈÄ Ãà±¸ÇÑÆÇ_Client.h"
+#include "ë°©ê³¼í›„ ì¶•êµ¬í•œíŒ_Client.h"
 
 extern bool gameover;
 extern PacketRenderData renderData;
@@ -13,10 +13,10 @@ int g_MyPlayerID = 0;
 PacketLogin MyLogin;
 bool loginResult;
 
-extern GameState g_GameState; // ÃÊ±â »óÅÂ´Â ·Î±×ÀÎ
+extern GameState g_GameState; // ì´ˆê¸° ìƒíƒœëŠ” ë¡œê·¸ì¸
 
 
-// --- connectÇÔ¼ö ---
+// --- connectí•¨ìˆ˜ ---
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port)
 {
     g_ServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -46,7 +46,7 @@ bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t por
     return true;
 }
 
-// --- Å¬¶óÀÌ¾ğÆ® ³×Æ®¿öÅ© ½º·¹µå ---
+// --- í´ë¼ì´ì–¸íŠ¸ ë„¤íŠ¸ì›Œí¬ ìŠ¤ë ˆë“œ ---
 DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 {
     SOCKET sock = (SOCKET)lpParam;
@@ -55,7 +55,7 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
     Sleep(3000);
 
 
-    //--- ·Î±×ÀÎ Ã³¸® ---
+    //--- ë¡œê·¸ì¸ ì²˜ë¦¬ ---
     bool loginSuccess = false;
     do
     {
@@ -66,6 +66,7 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
         if (loginResult.success) {
             MessageBox(NULL, L"Login Success", L"Login Success", MB_OK);
             loginSuccess = true;
+
         }
         else {
             if(strcmp(loginResult.message, "Login Failed") == 0)
@@ -88,15 +89,15 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 
     while (true)
     {
-        // Çì´õ ¼ö½Å
+        // í—¤ë” ìˆ˜ì‹ 
         if (!RecvTCP(sock, (char*)&header, sizeof(PacketHeader))) {
             break;
         }
-        // ÆĞÅ¶ Á¤º¸ º¯È¯ 
+        // íŒ¨í‚· ì •ë³´ ë³€í™˜ 
         header.size = ntohs(header.size);
         header.type = ntohs(header.type);
         // =====================
-        // (2) ÆĞÅ¶ Ã³¸®
+        // (2) íŒ¨í‚· ì²˜ë¦¬
         // =====================
         switch (header.type)
         {
@@ -123,6 +124,20 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 
             for (int i = 0; i < 9; i++)
                 strcpy_s(BroadCastChatMessage[i], renderData.BroadCastChatMessage[i]);
+
+            if (renderData.SoundKind[0]) {
+                ssystem->playSound(s_goal, 0, false, &c_goal);
+                renderData.SoundKind[0] = false;
+            }
+            if (renderData.SoundKind[1]) {
+                ssystem->playSound(s_touch, 0, false, &c_touch);
+                renderData.SoundKind[1] = false;
+            }
+            if (renderData.SoundKind[2]) {
+                ssystem->playSound(s_shoot, 0, false, &c_shoot);
+                renderData.SoundKind[2] = false;
+            }
+            
 
             break;
         }
