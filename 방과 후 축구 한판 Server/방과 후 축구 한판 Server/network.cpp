@@ -129,7 +129,7 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
 
                 std::ofstream file("IDPW.txt", std::ios::app);
                 if (file.is_open()) {
-                    file << std::endl << recvID << " " << recvPW;
+                    file << std::endl << recvID << "/" << recvPW;
                     file.close();
                     std::cout << "Player " << playerID << " Registered with ID: " << recvID << std::endl;
 
@@ -151,8 +151,7 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
                 std::string line;
                 while (std::getline(file, line)) {
                     if (line.empty()) continue;
-                    // 공백으로 구분된 id pw 예상
-                    auto pos = line.find(' ');
+                    auto pos = line.find('/');
                     if (pos == std::string::npos) continue;
 
                     std::string file_id = line.substr(0, pos);
