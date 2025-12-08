@@ -65,9 +65,9 @@ GLvoid drawScene() {
 		drawRect2D(420.0f, 330.0f, 360.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 아이디 바
 		drawRect2D(420.0f, 230.0f, 360.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 비밀번호 바
 		drawText(425.0f, 350.0f, "ID:");
-		drawText(465.0f, 350.0f, g_InputID); // 입력된 아이디
+		drawText(470.0f, 350.0f, g_InputID); // 입력된 아이디
 		drawText(425.0f, 250.0f, "PW:");
-		drawText(465.0f, 250.0f, g_InputPW); // 입력된 비밀번호
+		drawText(470.0f, 250.0f, g_InputPW); // 입력된 비밀번호
 
 		// 회원가입 버튼
 		drawRect2D(760.0f, 50.0f, 100.0f, 40.0f, 0.0f, 0.0f, 1.0f, 1.0f);

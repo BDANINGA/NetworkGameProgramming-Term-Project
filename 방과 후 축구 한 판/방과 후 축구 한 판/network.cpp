@@ -64,12 +64,16 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
         recv(sock, (char*)&loginResult, sizeof(PacketLoginResult), 0);
         std::cout << loginResult.message << std::endl;
         if (loginResult.success) {
+            MessageBox(NULL, L"Login Success", L"Login Success", MB_OK);
             loginSuccess = true;
         }
         else {
-            WCHAR msgText[32];
-			MultiByteToWideChar(CP_ACP, 0, loginResult.message, strlen(loginResult.message), msgText, 32);
-            MessageBox(NULL, msgText, L"Login Info", MB_OK);
+            if(strcmp(loginResult.message, "Login Failed") == 0)
+                MessageBox(NULL, L"Wrong ID/PW", L"Login Failed", MB_OK);
+			else if (strcmp(loginResult.message, "Registration Success") == 0)
+				MessageBox(NULL, L"Registration Successful. Please log in.", L"Registration Success", MB_OK);
+            else
+				MessageBox(NULL, L"Invalid Error during login/registration.", L"Error", MB_OK);
         }
 
         g_MyPlayerID = loginResult.myPlayerID;
