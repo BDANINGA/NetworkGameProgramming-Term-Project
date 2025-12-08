@@ -1,6 +1,6 @@
 #include "network.h"
 #include "Keeper.h"
-#include "¹æ°úÈÄ Ãà±¸ÇÑÆÇ_Client.h"
+#include "ë°©ê³¼í›„ ì¶•êµ¬í•œíŒ_Client.h"
 
 extern bool gameover;
 extern PacketRenderData renderData;
@@ -13,10 +13,10 @@ int g_MyPlayerID = 0;
 PacketLogin MyLogin;
 bool loginResult;
 
-extern GameState g_GameState; // ÃÊ±â »óÅÂ´Â ·Î±×ÀÎ
+extern GameState g_GameState; // ì´ˆê¸° ìƒíƒœëŠ” ë¡œê·¸ì¸
 
 
-// --- connectÇÔ¼ö ---
+// --- connectí•¨ìˆ˜ ---
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port)
 {
     g_ServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -46,7 +46,7 @@ bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t por
     return true;
 }
 
-// --- Å¬¶óÀÌ¾ğÆ® ³×Æ®¿öÅ© ½º·¹µå ---
+// --- í´ë¼ì´ì–¸íŠ¸ ë„¤íŠ¸ì›Œí¬ ìŠ¤ë ˆë“œ ---
 DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 {
     SOCKET sock = (SOCKET)lpParam;
@@ -55,42 +55,30 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
     Sleep(3000);
 
 
-    //--- ·Î±×ÀÎ Ã³¸® ---
+    //--- ë¡œê·¸ì¸ ì²˜ë¦¬ ---
     bool loginSuccess = false;
     do
     {
-        std::cout << "1. ·Î±×ÀÎ" << std::endl << "2. È¸¿ø°¡ÀÔ" << std::endl;
-        char choice;
-        std::cin >> choice;
-
-        char userID[32], userPW[32];
         PacketLoginResult loginResult;
-        switch (choice)
-        {
-        case '1':
-            std::cout << "ID, PW ÀÔ·Â:" << std::endl;
-            std::cin >> userID >> userPW;
-            PlayerLogin(MyLogin, sock, userID, userPW, false);
 
-            recv(sock, (char*)&loginResult, sizeof(PacketLoginResult), 0);
-            std::cout << loginResult.message << std::endl;
-            if (loginResult.success) {
-                loginSuccess = true;
-            }
-            g_MyPlayerID = loginResult.myPlayerID;
+        recv(sock, (char*)&loginResult, sizeof(PacketLoginResult), 0);
+        std::cout << loginResult.message << std::endl;
+        if (loginResult.success) {
+            MessageBox(NULL, L"Login Success", L"Login Success", MB_OK);
+            loginSuccess = true;
 
-            break;
-        case '2':
-            std::cout << "ID, PW ÀÔ·Â:" << std::endl;
-            std::cin >> userID >> userPW;
-            PlayerLogin(MyLogin, sock, userID, userPW, true);
-            break;
-        default:
-            std::cout << "Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù." << std::endl;
-            break;
+        }
+        else {
+            if(strcmp(loginResult.message, "Login Failed") == 0)
+                MessageBox(NULL, L"Wrong ID/PW", L"Login Failed", MB_OK);
+			else if (strcmp(loginResult.message, "Registration Success") == 0)
+				MessageBox(NULL, L"Registration Successful. Please log in.", L"Registration Success", MB_OK);
+            else
+				MessageBox(NULL, L"Invalid Error during login/registration.", L"Error", MB_OK);
         }
 
-        std::cout << std::endl;
+        g_MyPlayerID = loginResult.myPlayerID;
+
     } while (!loginSuccess);
 
     PacketGameReady readyData;
@@ -101,15 +89,15 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 
     while (true)
     {
-        // Çì´õ ¼ö½Å
+        // í—¤ë” ìˆ˜ì‹ 
         if (!RecvTCP(sock, (char*)&header, sizeof(PacketHeader))) {
             break;
         }
-        // ÆĞÅ¶ Á¤º¸ º¯È¯ 
+        // íŒ¨í‚· ì •ë³´ ë³€í™˜ 
         header.size = ntohs(header.size);
         header.type = ntohs(header.type);
         // =====================
-        // (2) ÆĞÅ¶ Ã³¸®
+        // (2) íŒ¨í‚· ì²˜ë¦¬
         // =====================
         switch (header.type)
         {
@@ -155,20 +143,6 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
         }
         case PKT_LOGIN_RESULT:
         {
-            PacketLoginResult resPkt;
-
-            if (!RecvTCP(sock, (char*)&resPkt + sizeof(PacketHeader), header.size)) {
-                std::cout << "error_recv: loginresult" << std::endl;
-                break;
-			}
-
-            loginResult = resPkt.success;
-
-            if (loginResult) {
-                g_MyPlayerID = resPkt.myPlayerID;
-            }
-            std::cout << "Player " << g_MyPlayerID << " Login Success" << std::endl;
-
             break;
         }
         case PKT_GAMEOVER:
