@@ -68,6 +68,10 @@ GLvoid drawScene() {
 		drawText(465.0f, 350.0f, g_InputID); // 입력된 아이디
 		drawText(425.0f, 250.0f, "PW:");
 		drawText(465.0f, 250.0f, g_InputPW); // 입력된 비밀번호
+
+		// 회원가입 버튼
+		drawRect2D(760.0f, 50.0f, 100.0f, 40.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+		drawText(770.0f, 65.0f, "Register");
 		break;
 
 	case STATE_GAME:
@@ -270,16 +274,15 @@ void Mouse(int button, int state, int x, int y)
 		if (g_GameState == STATE_LOGIN)
 		{
 			// 아이디 입력창 클릭
-			if (gl_x >= -0.3f && gl_x <= 0.3f && gl_y >= 0.07f && gl_y <= 0.19f)
+			if (gl_x >= -0.3f && gl_x <= 0.3f && gl_y >= -0.175f && gl_y <= -0.05f)
 			{
 				g_LoginCursor = LOGIN_CURSOR_ID;
 			}
 			// 비밀번호 입력창 클릭
-			else if (gl_x >= -0.3f && gl_x <= 0.3f && gl_y >= -0.19f && gl_y <= -0.05f)
+			else if (gl_x >= -0.3f && gl_x <= 0.3f && gl_y >= -0.425f && gl_y <= -0.3f)
 			{
 				g_LoginCursor = LOGIN_CURSOR_PW;
 			}
-
 			// 로그인 버튼 클릭
 			else if (gl_x >= -0.25f && gl_x <= 0.25f && gl_y >= -0.9f && gl_y <= -0.7f)
 			{
@@ -288,6 +291,21 @@ void Mouse(int button, int state, int x, int y)
 				PlayerLogin(MyLogin, g_ServerSocket, g_InputID, g_InputPW, false);
 				g_InputID[0] = '\0';
 				g_InputPW[0] = '\0';
+			}
+			// 회원가입 버튼 클릭
+			else if (gl_x >= 0.266f && gl_x <= 0.433f && gl_y >= -0.875f && gl_y <= -0.78f)
+			{
+				if(strlen(g_InputID) == 0 || strlen(g_InputPW) == 0) {
+					MessageBox(NULL, L"ID and PW cannot be empty for registration.", L"Registration Error", MB_OK);
+				}
+				else
+				{
+					// 회원가입 시도
+					std::cout << "Attempting registration with ID: " << g_InputID << " PW: " << g_InputPW << std::endl;
+					PlayerLogin(MyLogin, g_ServerSocket, g_InputID, g_InputPW, true);
+					g_InputID[0] = '\0';
+					g_InputPW[0] = '\0';
+				}
 			}
 
 			// 클릭 위치(디버그용)
