@@ -71,13 +71,8 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
             std::cout << "ID, PW 입력:" << std::endl;
             std::cin >> userID >> userPW;
             PlayerLogin(MyLogin, sock, userID, userPW, false);
-
-            recv(sock, (char*)&loginResult, sizeof(PacketLoginResult), 0);
-            std::cout << loginResult.message << std::endl;
-            if (loginResult.success) {
-                loginSuccess = true;
-            }
             break;
+
         case '2':
             std::cout << "ID, PW 입력:" << std::endl;
             std::cin >> userID >> userPW;
@@ -89,6 +84,14 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
         }
 
         std::cout << std::endl;
+
+        recv(sock, (char*)&loginResult, sizeof(PacketLoginResult), 0);
+        std::cout << loginResult.message << std::endl;
+        if (loginResult.success) {
+            loginSuccess = true;
+        }
+        g_MyPlayerID = loginResult.myPlayerID;
+
     } while (!loginSuccess);
 
     PacketGameReady readyData;
@@ -139,20 +142,6 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
         }
         case PKT_LOGIN_RESULT:
         {
-            PacketLoginResult resPkt;
-
-            if (!RecvTCP(sock, (char*)&resPkt + sizeof(PacketHeader), header.size)) {
-                std::cout << "error_recv: loginresult" << std::endl;
-                break;
-			}
-
-            loginResult = resPkt.success;
-
-            if (loginResult) {
-                g_MyPlayerID = resPkt.myPlayerID;
-            }
-            std::cout << "Player " << g_MyPlayerID << " Login Success" << std::endl;
-
             break;
         }
         case PKT_GAMEOVER:

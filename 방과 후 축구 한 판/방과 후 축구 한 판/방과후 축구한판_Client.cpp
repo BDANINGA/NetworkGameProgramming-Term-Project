@@ -23,6 +23,14 @@ extern SOCKET g_ServerSocket;
 GameState g_GameState = STATE_LOGIN; // 초기 상태는 로그인
 GLuint g_TexLoginBack = 0;           // 로그인 배경 텍스처 ID
 
+enum LoginCursor {
+	LOGIN_CURSOR_NONE,
+	LOGIN_CURSOR_ID,
+	LOGIN_CURSOR_PW
+};
+LoginCursor g_LoginCursor = LOGIN_CURSOR_NONE;
+char g_InputID[32] = {};
+char g_InputPW[32] = {};
 
 // 점수 sprintf
 char scoreString[128];
@@ -51,6 +59,13 @@ GLvoid drawScene() {
 	switch(g_GameState){
 	case STATE_LOGIN:
 		Draw2DBackground();
+
+		// 로그인 창
+		drawRect2D(400.0f, 300.0f, 400.0f, 200.0f, 1.0f, 1.0f, 1.0f, 0.8f);	// 창
+		drawRect2D(420.0f, 430.0f, 340.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 아이디 바
+		drawRect2D(420.0f, 330.0f, 340.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 비밀번호 바
+		drawText(420.0f, 450.0f, "ID:");
+		drawText(420.0f, 350.0f, "PW:");
 		break;
 
 	case STATE_GAME:
@@ -112,7 +127,55 @@ GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
 
 // 조작
 void Keyboard(unsigned char key, int x, int y) {
-	if (chat) {
+	if (g_GameState == STATE_LOGIN)
+	{
+		switch (g_LoginCursor)
+		{
+			case LOGIN_CURSOR_ID:
+			{
+				int len = strlen(g_InputID);
+				if (key == 8) // Backspace
+				{
+					if (len > 0)
+						g_InputID[len - 1] = '\0';
+				}
+				else if (key == '\r') // Enter
+				{
+					g_LoginCursor = LOGIN_CURSOR_PW;
+				}
+				else if (len < 31) // 최대 길이 제한
+				{
+					g_InputID[len] = key;
+					g_InputID[len + 1] = '\0';
+				}
+				break;
+			}
+			case LOGIN_CURSOR_PW:
+			{
+				int len = strlen(g_InputPW);
+				if (key == 8) // Backspace
+				{
+					if (len > 0)
+						g_InputPW[len - 1] = '\0';
+				}
+				else if (key == '\r') // Enter
+				{
+					// 로그인 시도
+					PlayerLogin(MyLogin, g_ServerSocket, g_InputID, g_InputPW, false);
+				}
+				else if (len < 31) // 최대 길이 제한
+				{
+					g_InputPW[len] = key;
+					g_InputPW[len + 1] = '\0';
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	else if (chat) {
 		int len = strlen(chatmessage.message);
 		int id_len = strlen(MyLogin.userID);
 		if (key == 8) {
@@ -199,7 +262,23 @@ void Mouse(int button, int state, int x, int y)
 	float gl_x, gl_y;
 	windowToOpenGL(x, y, width, height, gl_x, gl_y);
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		if (g_GameState == STATE_LOGIN)
+		{
+			// 아이디 입력창 클릭
+			if (gl_x >= -0.25f && gl_x <= 0.25f && gl_y >= 0.166f && gl_y <= 0.25f)
+			{
+				g_LoginCursor = LOGIN_CURSOR_ID;
+			}
+			// 비밀번호 입력창 클릭
+			else if (gl_x >= -0.25f && gl_x <= 0.25f && gl_y >= -0.083f && gl_y <= 0.0f)
+			{
+				g_LoginCursor = LOGIN_CURSOR_PW;
+			}
+			else
+			{
 
+			}
+		}
 	}
 }
 void Motion(int x, int y)

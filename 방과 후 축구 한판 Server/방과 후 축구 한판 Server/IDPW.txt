@@ -3,3 +3,4 @@ user2 password123
 user3 qwertyuiop
 
 newuser 1q2w3e4r
+newuser1 qwer
