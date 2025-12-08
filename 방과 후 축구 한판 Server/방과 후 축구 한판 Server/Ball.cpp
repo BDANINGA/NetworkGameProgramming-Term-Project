@@ -2,6 +2,9 @@
 
 // ---------------------------------------------------------------
 // Ball
+
+extern PacketRenderData statePkt;
+
 Ball::Ball() {
 	this->rotation = glm::vec3(0.1f, 0.1f, 0.1f);
 };
@@ -107,6 +110,9 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 			this->acceleration = 0.f;
 			this->rotationAngle = 0.0f;
 			this->first = false;
+
+			statePkt.SoundKind[0] = true;
+
 		}
 	}
 	// 중력 적용

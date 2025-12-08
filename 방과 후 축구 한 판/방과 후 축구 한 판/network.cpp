@@ -77,6 +77,8 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
             if (loginResult.success) {
                 loginSuccess = true;
             }
+            g_MyPlayerID = loginResult.myPlayerID;
+
             break;
         case '2':
             std::cout << "ID, PW ют╥б:" << std::endl;
@@ -134,6 +136,20 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
 
             for (int i = 0; i < 9; i++)
                 strcpy_s(BroadCastChatMessage[i], renderData.BroadCastChatMessage[i]);
+
+            if (renderData.SoundKind[0]) {
+                ssystem->playSound(s_goal, 0, false, &c_goal);
+                renderData.SoundKind[0] = false;
+            }
+            if (renderData.SoundKind[1]) {
+                ssystem->playSound(s_touch, 0, false, &c_touch);
+                renderData.SoundKind[1] = false;
+            }
+            if (renderData.SoundKind[2]) {
+                ssystem->playSound(s_shoot, 0, false, &c_shoot);
+                renderData.SoundKind[2] = false;
+            }
+            
 
             break;
         }
