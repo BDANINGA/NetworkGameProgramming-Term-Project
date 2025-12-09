@@ -153,6 +153,13 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
             std::cout << gameover << std::endl;
             break;
         }
+        case PKT_USER_DATA:
+        {
+            if (!RecvTCP(sock, (char*)&userdata + sizeof(PacketHeader), header.size)) {
+                std::cout << "error_recv: userdata" << std::endl;
+                break;
+            }
+        }
         default:
             std::cout << "Unknown packet type: " << header.type << std::endl;
             break;
