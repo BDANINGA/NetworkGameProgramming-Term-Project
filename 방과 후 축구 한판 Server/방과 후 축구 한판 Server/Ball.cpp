@@ -18,7 +18,7 @@ glm::vec3 Ball::getDirection() { return this->direction; };
 float Ball::getRotationAngle() { return this->rotationAngle; };
 float Ball::getAcceleration() { return this->acceleration; };
 
-extern uint16_t currentScore[3];
+extern uint16_t currentScore[MAX_PLAYERS];
 
 void Ball::setPosition(GLfloat x, GLfloat y, GLfloat z) {
 	this->position.x = x;

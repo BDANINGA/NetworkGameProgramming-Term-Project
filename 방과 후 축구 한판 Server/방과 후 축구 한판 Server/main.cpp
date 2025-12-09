@@ -10,6 +10,8 @@ PacketInputkey g_LatestInputKey[MAX_PLAYERS];
 PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];
 PacketGameReady g_GameReady[MAX_PLAYERS];
 PacketChatMessage g_ChatMessage[MAX_PLAYERS];
+PacketUserData g_UserData;
+std::string LoginID[MAX_PLAYERS] {};
 
 // 채팅메세지 배열
 char BroadCastChatMessage[9][256]{};
@@ -17,7 +19,7 @@ char BroadCastChatMessage[9][256]{};
 // --- 전역 변수 보호용 Lock ---
 CRITICAL_SECTION g_InputLock;
 
-uint16_t currentScore[3]{ 0,0,0 };
+uint16_t currentScore[MAX_PLAYERS]{};
 
 void GameSessionLoop(SOCKET clientSockets[]) {
 
@@ -132,9 +134,12 @@ void GameSessionLoop(SOCKET clientSockets[]) {
         
         // 게임 종료
         if (ENDTIME - (time(NULL) - startTime) == 0) {
+            UpdateScore();
             for (int i = 0; i < MAX_PLAYERS; i++) {
+                send_userdata(clientSockets[i], g_UserData);
                 Gameover(clientSockets[i]);
             }
+            Sleep(1000);
             break;
         }
 

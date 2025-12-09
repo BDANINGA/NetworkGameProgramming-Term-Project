@@ -135,6 +135,15 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
                     std::cerr << "Could not open IDPW.txt for registration." << std::endl;
                 }
 
+                std::ofstream file2("UserData.txt", std::ios::app);
+                if (file2.is_open()) {
+                    file2 << std::endl << recvID << " 0" << " 0";
+                    file2.close();
+                }
+                else {
+                    std::cerr << "Could not open UserData.txt for registration." << std::endl;
+                }
+
                 break;
 			}
 
@@ -166,17 +175,20 @@ DWORD WINAPI ServerReceiveThread(LPVOID lpParam) {
             // 응답 패킷 생성 및 전송 (성공이면 success=1, 실패면 0)
             PacketLoginResult resPkt;
             resPkt.success = found ? 1 : 0;
-            resPkt.myPlayerID = context->playerID;
+            resPkt.myPlayerID = playerID;
             if (found) {
                 strcpy_s(resPkt.message, "Login Success");
                 std::cout << "Player " << playerID << " Logged in." << std::endl;
+                LoginID[playerID] = recvID;
             } else {
                 strcpy_s(resPkt.message, "Login Failed");
                 std::cout << "Player " << playerID << " login failed." << std::endl;
             }
 
             // 전체 구조체를 그대로 전송 (header는 이미 네트워크 바이트 오더로 초기화되어 있음)
-            send(sock, (char*)&resPkt, sizeof(PacketLoginResult), 0);
+            int sent = send(sock, (char*)&resPkt, sizeof(PacketLoginResult), 0);
+            if (sent == SOCKET_ERROR)
+                std::cerr << "error: send_LoginResult" << std::endl;
 
             break;
         }

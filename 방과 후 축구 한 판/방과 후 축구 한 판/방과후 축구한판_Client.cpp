@@ -16,6 +16,7 @@ PacketInputkey input{};
 PacketInputspecialkey s_input{};
 PacketRenderData renderData;
 PacketChatMessage chatmessage{};
+PacketUserData userdata;
 extern PacketLogin MyLogin;
 
 extern SOCKET g_ServerSocket;
@@ -28,7 +29,10 @@ GLuint g_TexLoginBack = 0;           // 로그인 배경 텍스처 ID
 char scoreString[128];
 int g_CurrentScores[MAX_PLAYERS]{};
 int g_SecondsRemaining{};
+
 char BroadCastChatMessage[9][256]{};
+
+char userdataString[128];
 
 extern int g_MyPlayerID;
 
@@ -261,14 +265,22 @@ GLvoid gameoverScene() {
 	drawText((width / 2) - 25.0f, height - 30, "Score");
 	drawText((width / 5) * 2 + 30.0f, height - 80, scoreString);
 	drawText((width / 2) - 40.0f, height - 130, "WinPlayer");
-	drawText((width / 2) - 30.0f, height - 180, "Player1");
+	drawText((width / 2) - 30.0f, height - 180, userdata.winPlayerID);
 
+	sprintf(userdataString, "match: %d, Win: %d, Lose: %d",
+		userdata.data[0].totalMatch, userdata.data[0].win, userdata.data[0].totalMatch - userdata.data[0].win);
 	drawText(100, height - 230, "P1 경기 전적");
-	drawText(100, height - 280, "match: x, Win: y, Lose: z, Winrate: xx");
+	drawText(100, height - 280, userdataString);
+
+	sprintf(userdataString, "match: %d, Win: %d, Lose: %d",
+		userdata.data[1].totalMatch, userdata.data[1].win, userdata.data[1].totalMatch - userdata.data[1].win);
 	drawText(100, height - 330, "P2 경기 전적");
-	drawText(100, height - 380, "match: x, Win: y, Lose: z, Winrate: xx");
+	drawText(100, height - 380, userdataString);
+
+	sprintf(userdataString, "match: %d, Win: %d, Lose: %d",
+		userdata.data[2].totalMatch, userdata.data[2].win, userdata.data[2].totalMatch - userdata.data[2].win);
 	drawText(100, height - 430, "P3 경기 전적");
-	drawText(100, height - 480, "match: x, Win: y, Lose: z, Winrate: xx");
+	drawText(100, height - 480, userdataString);
 
 
 	camera.setPosition(glm::vec3(0.0f, 1.0f, 5.0f)); 

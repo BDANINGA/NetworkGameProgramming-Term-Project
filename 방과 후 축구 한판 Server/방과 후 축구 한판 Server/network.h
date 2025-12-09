@@ -8,7 +8,11 @@ extern PacketInputkey g_LatestInputKey[MAX_PLAYERS];
 extern PacketInputspecialkey g_LatestInputSpecialKey[MAX_PLAYERS];
 extern PacketGameReady g_GameReady[MAX_PLAYERS];
 extern PacketChatMessage g_ChatMessage[MAX_PLAYERS];
+extern PacketUserData g_UserData;
 extern char BroadCastChatMessage[9][256];
+extern std::string LoginID[MAX_PLAYERS];
+
+extern uint16_t currentScore[MAX_PLAYERS];
 
 // --- 스레드에 넘겨줄 인수 ---
 struct ClientContext {

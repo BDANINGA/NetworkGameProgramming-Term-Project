@@ -6,6 +6,7 @@
 extern int g_CurrentScores[MAX_PLAYERS];
 extern int g_SecondsRemaining;
 extern char BroadCastChatMessage[9][256];
+extern PacketUserData userdata;
 
 // --- connectÇÔ¼ö ---
 bool ConnectToServer(SOCKET& g_ServerSocket, const char* ipAddress, uint16_t port);

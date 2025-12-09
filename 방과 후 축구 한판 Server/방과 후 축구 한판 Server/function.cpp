@@ -59,15 +59,58 @@ void TimerFunction(int value)
 }
 
 // Gameover - GameSessionLoop()함수 안에서 시간을 체크함.
-void Gameover(SOCKET socket) {
-        UpdateScore();
+void Gameover(SOCKET& socket) {
         send_gameover(socket);
-        ReturntoLogin();
 }
 
 // UpdateScore - 11.28일 구현
 void UpdateScore() {
+    std::vector<UserData> temp;
 
+    std::ifstream file("UserData.txt");
+    std::string id;
+    int total{}, win{};
+    
+
+    int bestScore{};
+    std::string winPlayer{};
+    for (int i = 0; i < MAX_PLAYERS; i++) {
+        if (currentScore[i] > bestScore)
+            winPlayer = LoginID[i];
+    }
+
+    while (file >> id >> total >> win) {
+        UserData user;
+        strcpy_s(user.userID, id.c_str());
+        user.totalMatch = total;
+        user.win = win;
+        temp.push_back(user);
+    }
+    file.close();
+
+    // 특정 유저 수정
+    for (auto& user : temp) {
+        for (int i = 0; i < MAX_PLAYERS; i++) {
+            if (user.userID == LoginID[i]) {
+                user.totalMatch++;
+                if (winPlayer == LoginID[i]) {
+                    user.win++;
+                    strcpy_s(g_UserData.winPlayerID, winPlayer.c_str());
+                }
+                else {
+                    winPlayer = "Draw";
+                    strcpy_s(g_UserData.winPlayerID, winPlayer.c_str());
+                }
+                g_UserData.data[i].totalMatch = user.totalMatch;
+                g_UserData.data[i].win = user.win;
+            }
+        }
+    }
+    std::ofstream out("UserData.txt");
+    for (auto& user : temp) {
+        out << user.userID << " " << user.totalMatch << " " << user.win << "\n";
+    }
+    out.close();
 }
 
 // ReturntoLogin - 개발일정에 미처 적어두지 못했음. Login 관련이기 떄문에 1차토의 후 일정 검토
