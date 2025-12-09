@@ -146,8 +146,6 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 	}
 	if (this->curve)
 		this->velocity.x -= this->CURVE_TURN_SPEED;
-	if (this->strong)
-		this->velocity.z += 0.5f;
 
 
 	// 공의 위치 업데이트

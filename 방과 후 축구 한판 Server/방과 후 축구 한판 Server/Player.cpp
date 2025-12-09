@@ -286,9 +286,11 @@ void Player::Shoot(Ball& ball) {
 		}
 		else if (this->strong) {
 			ball.changeStrong();
+			ball.setVelocity(glm::vec3(ball.getVelocity().x + 0.5f, this->shootingpower / 2, ball.getVelocity().z));
 		}
 		else
 			ball.setVelocity(glm::vec3(ball.getVelocity().x, this->shootingpower, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
+		this->shootingpower = 0;
 		this->shooting = false;
 		this->has_ball = false;
 		ball.changeFirst(false);
