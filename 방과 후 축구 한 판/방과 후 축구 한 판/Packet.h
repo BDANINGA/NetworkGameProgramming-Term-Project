@@ -25,15 +25,15 @@ struct PacketLoginResult {
 };
 
 struct UserData {
+	char userID[32];
 	int totalMatch;
 	int win;
-	int lose;
-	float winRate;
 };
 
 struct PacketUserData {
 	PacketHeader header{ htons(PKT_USER_DATA), htons(sizeof(PacketUserData) - sizeof(PacketHeader)) };
-	UserData data;
+	UserData data[3];
+	char winPlayerID[32];
 };
 
 struct PlayerData {
