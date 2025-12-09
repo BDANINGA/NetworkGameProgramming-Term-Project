@@ -24,6 +24,14 @@ extern SOCKET g_ServerSocket;
 GameState g_GameState = STATE_LOGIN; // 초기 상태는 로그인
 GLuint g_TexLoginBack = 0;           // 로그인 배경 텍스처 ID
 
+enum LoginCursor {
+	LOGIN_CURSOR_NONE,
+	LOGIN_CURSOR_ID,
+	LOGIN_CURSOR_PW
+};
+LoginCursor g_LoginCursor = LOGIN_CURSOR_NONE;
+char g_InputID[32] = {};
+char g_InputPW[32] = {};
 
 // 점수 sprintf
 char scoreString[128];
@@ -55,6 +63,19 @@ GLvoid drawScene() {
 	switch(g_GameState){
 	case STATE_LOGIN:
 		Draw2DBackground();
+
+		// 로그인 창
+		drawRect2D(400.0f, 200.0f, 400.0f, 200.0f, 1.0f, 1.0f, 1.0f, 0.8f);	// 창
+		drawRect2D(420.0f, 330.0f, 360.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 아이디 바
+		drawRect2D(420.0f, 230.0f, 360.0f, 50.0f, 0.0f, 0.0f, 0.0f, 1.0f);	// 비밀번호 바
+		drawText(425.0f, 350.0f, "ID:");
+		drawText(470.0f, 350.0f, g_InputID); // 입력된 아이디
+		drawText(425.0f, 250.0f, "PW:");
+		drawText(470.0f, 250.0f, g_InputPW); // 입력된 비밀번호
+
+		// 회원가입 버튼
+		drawRect2D(760.0f, 50.0f, 100.0f, 40.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+		drawText(770.0f, 65.0f, "Register");
 		break;
 
 	case STATE_GAME:
@@ -116,7 +137,58 @@ GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
 
 // 조작
 void Keyboard(unsigned char key, int x, int y) {
-	if (chat) {
+	if (g_GameState == STATE_LOGIN)
+	{
+		switch (g_LoginCursor)
+		{
+			case LOGIN_CURSOR_ID:
+			{
+				int len = strlen(g_InputID);
+				if (key == 8) // Backspace
+				{
+					if (len > 0)
+						g_InputID[len - 1] = '\0';
+				}
+				else if (key == '\r') // Enter
+				{
+					g_LoginCursor = LOGIN_CURSOR_PW;
+				}
+				else if (len < 31) // 최대 길이 제한
+				{
+					g_InputID[len] = key;
+					g_InputID[len + 1] = '\0';
+				}
+				break;
+			}
+			case LOGIN_CURSOR_PW:
+			{
+				int len = strlen(g_InputPW);
+				if (key == 8) // Backspace
+				{
+					if (len > 0)
+						g_InputPW[len - 1] = '\0';
+				}
+				else if (key == '\r') // Enter
+				{
+					// 로그인 시도
+					std::cout << "Attempting login with ID: " << g_InputID << " PW: " << g_InputPW << std::endl;
+					PlayerLogin(MyLogin, g_ServerSocket, g_InputID, g_InputPW, false);
+					g_InputID[0] = '\0';
+					g_InputPW[0] = '\0';
+				}
+				else if (len < 31) // 최대 길이 제한
+				{
+					g_InputPW[len] = key;
+					g_InputPW[len + 1] = '\0';
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	else if (chat) {
 		int len = strlen(chatmessage.message);
 		int id_len = strlen(MyLogin.userID);
 		if (key == 8) {
@@ -203,7 +275,47 @@ void Mouse(int button, int state, int x, int y)
 	float gl_x, gl_y;
 	windowToOpenGL(x, y, width, height, gl_x, gl_y);
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		if (g_GameState == STATE_LOGIN)
+		{
+			// 아이디 입력창 클릭
+			if (gl_x >= -0.3f && gl_x <= 0.3f && gl_y >= -0.175f && gl_y <= -0.05f)
+			{
+				g_LoginCursor = LOGIN_CURSOR_ID;
+			}
+			// 비밀번호 입력창 클릭
+			else if (gl_x >= -0.3f && gl_x <= 0.3f && gl_y >= -0.425f && gl_y <= -0.3f)
+			{
+				g_LoginCursor = LOGIN_CURSOR_PW;
+			}
+			// 로그인 버튼 클릭
+			else if (gl_x >= -0.25f && gl_x <= 0.25f && gl_y >= -0.9f && gl_y <= -0.7f)
+			{
+				// 로그인 시도
+				std::cout << "Attempting login with ID: " << g_InputID << " PW: " << g_InputPW << std::endl;
+				PlayerLogin(MyLogin, g_ServerSocket, g_InputID, g_InputPW, false);
+				g_InputID[0] = '\0';
+				g_InputPW[0] = '\0';
+			}
+			// 회원가입 버튼 클릭
+			else if (gl_x >= 0.266f && gl_x <= 0.433f && gl_y >= -0.875f && gl_y <= -0.78f)
+			{
+				if(strlen(g_InputID) == 0 || strlen(g_InputPW) == 0) {
+					MessageBox(NULL, L"ID and PW cannot be empty for registration.", L"Registration Error", MB_OK);
+				}
+				else
+				{
+					// 회원가입 시도
+					std::cout << "Attempting registration with ID: " << g_InputID << " PW: " << g_InputPW << std::endl;
+					PlayerLogin(MyLogin, g_ServerSocket, g_InputID, g_InputPW, true);
+					g_InputID[0] = '\0';
+					g_InputPW[0] = '\0';
+				}
+			}
 
+			// 클릭 위치(디버그용)
+			//std::cout << "gl_x: " << gl_x << ", gl_y: " << gl_y << std::endl;
+			//std::cout << "Selected Cursor: " << g_LoginCursor << std::endl;
+		}
 	}
 }
 void Motion(int x, int y)

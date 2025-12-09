@@ -3,6 +3,9 @@
 #define CAN_KICK_DISTANCE 0.5f
 // ---------------------------------------------------------------
 // Player
+
+extern PacketRenderData statePkt;
+
 Player::Player() = default;
 Player::Player(glm::vec3 pos) {
 	this->position = { pos };
@@ -31,6 +34,7 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 
 			if (this->distance <= CAN_KICK_DISTANCE) {
 				ball.setAcceleration(0.1f);
+				statePkt.SoundKind[1] = true;
 			}
 			else
 				ball.setAcceleration(0);
@@ -42,6 +46,7 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 
 			if (this->distance <= CAN_KICK_DISTANCE) {
 				ball.setAcceleration(0.01f);
+				statePkt.SoundKind[1] = true;
 			}
 			else
 				ball.setAcceleration(0);
@@ -287,6 +292,9 @@ void Player::Shoot(Ball& ball) {
 		this->shooting = false;
 		this->has_ball = false;
 		ball.changeFirst(false);
+
+		statePkt.SoundKind[2] = true;
+
 	}
 }
 bool Player::isShooting() { return this->shootingInprogress; };
