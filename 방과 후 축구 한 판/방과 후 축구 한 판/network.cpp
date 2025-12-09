@@ -159,6 +159,7 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
                 std::cout << "error_recv: userdata" << std::endl;
                 break;
             }
+            break;
         }
         default:
             std::cout << "Unknown packet type: " << header.type << std::endl;

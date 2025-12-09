@@ -80,6 +80,8 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		this->acceleration = 0.f;
 		this->rotationAngle = 0.0f;
 		this->first = false;
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+			players[i].toggleHasBall(false);
 
 		Sleep(300);
 	}
@@ -120,6 +122,7 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 				glm::vec3 random_DirVec = randomDir_xz();
 				random_DirVec.y = 0;
 				players[i].setPosition(random_DirVec * 15.0f);
+				players[i].toggleHasBall(false);
 			}
 
 		}
@@ -170,6 +173,8 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
 		this->acceleration = 0.f;
 		this->first = false;
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+			players[i].toggleHasBall(false);
 	}
 	else if (this->position.x > 20.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -177,6 +182,8 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
 		this->acceleration = 0.f;
 		this->first = false;
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+			players[i].toggleHasBall(false);
 	}
 
 	if (this->position.z < -40.0f) {
@@ -185,6 +192,8 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
 		this->acceleration = 0.f;
 		this->first = false;
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+			players[i].toggleHasBall(false);
 	}
 	else if (this->position.z > 40.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -192,6 +201,8 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
 		this->acceleration = 0.f;
 		this->first = false;
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+			players[i].toggleHasBall(false);
 	}
 
 	// È¸Àü °¢µµ ¾÷µ¥ÀÌÆ® (°øÀÇ ÁøÇà ¹æÇâ¿¡ ºñ·Ê)

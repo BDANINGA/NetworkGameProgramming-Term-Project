@@ -1,4 +1,4 @@
-dlatjdgns 10 2
-kimyc 10 0
-kimyc 10 0
-qwer 10 2
+dlatjdgns 11 2
+kimyc 11 1
+kimyc 11 1
+qwer 11 2
