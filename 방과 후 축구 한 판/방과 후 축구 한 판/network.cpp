@@ -1,6 +1,6 @@
 #include "network.h"
 #include "Keeper.h"
-#include "방과후 축구한판_Client.h"
+#include "Game_Client.h"
 
 extern bool gameover;
 extern PacketRenderData renderData;

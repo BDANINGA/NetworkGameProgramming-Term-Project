@@ -2,7 +2,7 @@
 //--- 메인 함수
 #pragma comment(lib,"glew32.lib") 
 #pragma comment(lib,"freeglut.lib") 
-#include "방과후 축구한판_Client.h"
+#include "Game_Client.h"
 
 //------------------------------------------------------------------------------------------------------
 Player player[MAX_PLAYERS];

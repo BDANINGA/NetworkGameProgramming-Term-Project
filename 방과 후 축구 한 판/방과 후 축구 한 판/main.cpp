@@ -1,5 +1,5 @@
 //--- 메인 함수
-#include "방과후 축구한판_Client.h"
+#include "Game_Client.h"
 
 #define SERVERPORT 9000
 

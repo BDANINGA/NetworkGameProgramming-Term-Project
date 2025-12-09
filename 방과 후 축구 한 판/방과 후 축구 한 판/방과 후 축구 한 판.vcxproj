@@ -125,10 +125,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>FMOD Studio API Windows\api\core\inc;FMOD Studio API Windows\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>glew32.lib freeglut.lib fmod_vc.lib fmodstudio_vc.lib fmodL_vc.lib fmodstudioL_vc.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>FMOD Studio API Windows\api\core\lib\x64;FMOD Studio API Windows\api\studio\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -142,7 +146,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="send.cpp" />
-    <ClCompile Include="방과후 축구한판_Client.cpp">
+    <ClCompile Include="Game_Client.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"> %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemGroup>
@@ -157,7 +161,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="방과후 축구한판_Client.h" />
+    <ClInclude Include="Game_Client.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.glsl" />
