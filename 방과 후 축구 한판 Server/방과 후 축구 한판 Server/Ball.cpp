@@ -76,13 +76,12 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		std::cout << "°ñÅ°ÆÛ¿Í Ãæµ¹!" << std::endl;
 		keeper_has_ball = 1;
 		this->velocity *= 0.0f;
-
-		Sleep(300);
-
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->acceleration = 0.f;
 		this->rotationAngle = 0.0f;
 		this->first = false;
+
+		Sleep(300);
 	}
 	else
 	{
@@ -169,12 +168,14 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
+		this->acceleration = 0.f;
 		this->first = false;
 	}
 	else if (this->position.x > 20.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
+		this->acceleration = 0.f;
 		this->first = false;
 	}
 
@@ -182,12 +183,14 @@ void Ball::Move(glm::vec3 keeperPos, bool keeper_has_ball) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
+		this->acceleration = 0.f;
 		this->first = false;
 	}
 	else if (this->position.z > 40.0f) {
 		this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 		this->rotationAngle = 0.0f;  // °øÀÌ ¸ØÃß¸é È¸Àüµµ ¸ØÃã
+		this->acceleration = 0.f;
 		this->first = false;
 	}
 

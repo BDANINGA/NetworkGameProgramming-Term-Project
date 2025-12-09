@@ -15,7 +15,7 @@ public:
 
 	void setPosition(glm::vec3 pos);
 
-	void Move(Ball& ball, bool keeper_has_ball);
+	void Move(Ball& ball);
 
 	void changeSprint();
 	void Sprint();

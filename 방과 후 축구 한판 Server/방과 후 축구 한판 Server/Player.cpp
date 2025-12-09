@@ -20,7 +20,7 @@ void Player::setPosition(glm::vec3 pos) {
 	this->position = pos;
 };
 
-void Player::Move(Ball& ball, bool keeper_has_ball) {
+void Player::Move(Ball& ball) {
 	this->distance = glm::distance(this->position, ball.getPosition());
 	if (this->has_ball) {
 		glm::vec3 distanceVec = this->position - ball.getPosition();
@@ -266,7 +266,7 @@ bool Player::isTackle() { return this->tackle; };
 void Player::ShootInProgress(Ball& ball) {
 	if (this->shootingInprogress && distance <= 1.5f) {
 		if (this->strong)
-			this->shootingpower = 1.0f;
+			this->shootingpower += this->shooting_increase * 2;
 		else
 			this->shootingpower += this->shooting_increase;
 		if (!this->strong && this->shootingpower > this->max_shootingpower) {
@@ -279,14 +279,13 @@ void Player::Shoot(Ball& ball) {
 	if (!this->shootingInprogress) {
 		ball.setVelocity(glm::normalize(ball.getVelocity()) * this->shootingpower);  // 슈팅 파워 적용
 		ball.setMaxspeed(3.0f);
-		std::cout << "슛" << std::endl;
 		if (this->curve) {
 			ball.changeCurve();
 			ball.setVelocity(glm::vec3(ball.getVelocity().x + 0.5f, this->shootingpower, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음
 		}
 		else if (this->strong) {
 			ball.changeStrong();
-			ball.setVelocity(glm::vec3(ball.getVelocity().x + 0.5f, this->shootingpower / 2, ball.getVelocity().z));
+			ball.setVelocity(glm::vec3(ball.getVelocity().x, this->shootingpower / 2, ball.getVelocity().z));
 		}
 		else
 			ball.setVelocity(glm::vec3(ball.getVelocity().x, this->shootingpower, ball.getVelocity().z));  // 살짝 위로 튕기게 할 수도 있음

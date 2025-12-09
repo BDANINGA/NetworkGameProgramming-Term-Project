@@ -73,12 +73,13 @@ void UpdateScore() {
     
 
     int bestScore{};
-    std::string winPlayer{};
+    std::string winPlayer = "Draw";
     for (int i = 0; i < MAX_PLAYERS; i++) {
-        if (currentScore[i] > bestScore)
+        if ((int)currentScore[i] > bestScore) {
+            bestScore = (int)currentScore[i];
             winPlayer = LoginID[i];
+        }
     }
-
     while (file >> id >> total >> win) {
         UserData user;
         strcpy_s(user.userID, id.c_str());
@@ -93,12 +94,8 @@ void UpdateScore() {
         for (int i = 0; i < MAX_PLAYERS; i++) {
             if (user.userID == LoginID[i]) {
                 user.totalMatch++;
-                if (winPlayer == LoginID[i]) {
+                if (winPlayer == user.userID) {
                     user.win++;
-                    strcpy_s(g_UserData.winPlayerID, winPlayer.c_str());
-                }
-                else {
-                    winPlayer = "Draw";
                     strcpy_s(g_UserData.winPlayerID, winPlayer.c_str());
                 }
                 g_UserData.data[i].totalMatch = user.totalMatch;

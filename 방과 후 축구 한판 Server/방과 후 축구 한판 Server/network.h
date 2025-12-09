@@ -2,7 +2,7 @@
 #include "Packet.h"
 
 #define MAX_PLAYERS 3
-#define ENDTIME 300
+#define ENDTIME 60
 #define GAMESESSION_TICK 1
 
 extern PacketInputkey g_LatestInputKey[MAX_PLAYERS];

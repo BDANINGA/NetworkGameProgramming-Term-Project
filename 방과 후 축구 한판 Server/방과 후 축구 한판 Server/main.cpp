@@ -88,13 +88,13 @@ void GameSessionLoop(SOCKET clientSockets[]) {
             players[i].DoTackle();
             
 
-            if (players[i].ishasBall() && players[i].isShooting()) {
+            if (players[i].ishasBall() && players[i].isShooting() && !keeper.ishasBall()) {
                 ball.setLastOwner(i);
                 players[i].ShootInProgress(ball);
             }
             if (players[i].isShoot())
                 players[i].Shoot(ball);
-            players[i].Move(ball, keeper.ishasBall());
+            players[i].Move(ball);
         }
 
         TackleEvent(players, MAX_PLAYERS, ball);
