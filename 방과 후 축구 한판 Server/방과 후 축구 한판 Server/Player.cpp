@@ -29,11 +29,11 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 		this->rotation.y = glm::atan(-distanceVec.x, -distanceVec.z);
 
 		if (this->sprint) {
-			this->acceleration = 0.005f;
+			this->acceleration = 0.005f * GAMESESSION_TICK;
 			this->max_speed = 0.1f;
 
 			if (this->distance <= CAN_KICK_DISTANCE) {
-				ball.setAcceleration(0.1f);
+				ball.setAcceleration(0.1f * GAMESESSION_TICK);
 				statePkt.SoundKind[1] = true;
 			}
 			else
@@ -41,11 +41,11 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 
 		}
 		else {
-			this->acceleration = 0.002f;  // 플레이어의 가속도
+			this->acceleration = 0.002f * GAMESESSION_TICK;  // 플레이어의 가속도
 			this->max_speed = 0.07f;
 
 			if (this->distance <= CAN_KICK_DISTANCE) {
-				ball.setAcceleration(0.01f);
+				ball.setAcceleration(0.01f * GAMESESSION_TICK);
 				statePkt.SoundKind[1] = true;
 			}
 			else
@@ -132,11 +132,11 @@ void Player::Move(Ball& ball, bool keeper_has_ball) {
 	}
 	else {
 		if (this->sprint) {
-			this->acceleration = 0.005f;
+			this->acceleration = 0.005f * GAMESESSION_TICK;
 			this->max_speed = 0.1f;
 		}
 		else {
-			this->acceleration = 0.002f;  // 플레이어의 가속도
+			this->acceleration = 0.002f * GAMESESSION_TICK;  // 플레이어의 가속도
 			this->max_speed = 0.07f;
 		}
 
@@ -349,7 +349,6 @@ void TackleEvent(Player* player, int count, Ball& ball) {
 					if (player[i].getBallDistance(ball) < player[j].getBallDistance(ball)) {
 						player[j].toggleHasBall(false);
 						player[i].toggleHasBall(true);
-						std::cout << "태클 성공" << std::endl;
 					}
 				}
 			}

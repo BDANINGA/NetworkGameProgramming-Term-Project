@@ -61,7 +61,7 @@ bool checkSegmentCollision(glm::vec3 start, glm::vec3 end, glm::vec3 goalPos, gl
 // tiemer
 void TimerFunction(int value)
 {
-    glutTimerFunc(25, TimerFunction, 1);
+    glutTimerFunc(33, TimerFunction, 1);
     glutPostRedisplay();
 }
 
@@ -394,7 +394,7 @@ void InitBuffer()
 
     // 배경 사운드 무한 반복
     ssystem->playSound(s_bgm, 0, false, &c_bgm);
-    glutTimerFunc(25, TimerFunction, 1);
+    glutTimerFunc(33, TimerFunction, 1);
 
 }
 

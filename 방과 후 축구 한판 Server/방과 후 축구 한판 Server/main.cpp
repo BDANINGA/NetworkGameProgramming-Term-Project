@@ -149,7 +149,7 @@ void GameSessionLoop(SOCKET clientSockets[]) {
             break;
         }
 
-        Sleep(1);
+        Sleep(GAMESESSION_TICK);
     }
 }
 

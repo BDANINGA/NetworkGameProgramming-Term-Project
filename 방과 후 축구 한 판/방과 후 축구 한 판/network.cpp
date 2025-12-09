@@ -52,9 +52,6 @@ DWORD WINAPI ClientNetworkThread(LPVOID lpParam)
     SOCKET sock = (SOCKET)lpParam;
     PacketHeader header;
 
-    Sleep(3000);
-
-
     //--- 로그인 처리 ---
     bool loginSuccess = false;
     do
