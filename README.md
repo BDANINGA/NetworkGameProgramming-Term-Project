@@ -47,36 +47,38 @@ Commit Rule: 구현이 완료된 코드는 팀장이 테스트가 되는 지 확
 
 ## Self Check List
 ### 1. Client/Server Connect 
-|ㅣ|담당자|ㅣ|주요 기능|ㅣ|완성 여부|ㅣ|
-|---|:---:|---|:---:|---|:---:|---|
-|ㅣ|임성훈|ㅣ|기존 코드 Client/Server 분할|ㅣ|O|ㅣ|
-|ㅣ|임성훈|ㅣ|Packet 설계 및 구현|ㅣ|O|ㅣ|
-|ㅣ|임성훈|ㅣ|Input IP Address|ㅣ|O|ㅣ|
-|ㅣ|김용채|ㅣ|ConnectToServer()|ㅣ|O|ㅣ|
-|ㅣ|김용채|ㅣ|ListenForClients()|ㅣ|O|ㅣ|
-|ㅣ|김용채|ㅣ|AcceptClient()|ㅣ|O|ㅣ|
+|담당자|주요 기능|완성 여부|
+|:---:|:---:|:---:|
+|임성훈|기존 코드 Client/Server 분할|O|
+|임성훈|Packet 설계 및 구현|O|
+|임성훈|Input IP Address|O|
+|김용채|ConnectToServer()|O|
+|김용채|ListenForClients()|O|
+|김용채|AcceptClient()|O|
 
 ### 2. Client/Server Thread
-|ㅣ|담당자|ㅣ|주요 기능|ㅣ|완성 여부|ㅣ|
-|---|:---:|---|:---:|---|:---:|---|
-|ㅣ|박지성|ㅣ|ServerReceiveThread|ㅣ|O|ㅣ|
-|ㅣ|박지성|ㅣ|ClientNetworkThread|ㅣ|O|ㅣ|
-|ㅣ|박지성|ㅣ|GameSessionLoop(ServerMainThread)|ㅣ|O|ㅣ|
-|ㅣ|김용채|ㅣ|CreateServerReceiveThread|ㅣ|O|ㅣ|
-|ㅣ|김용채|ㅣ|CreateClientNetworkThread|ㅣ|O|ㅣ|
+|담당자|주요 기능|완성 여부|
+|:---:|:---:|:---:|
+|박지성|ServerReceiveThread|O|
+|박지성|ClientNetworkThread|O|
+|박지성|GameSessionLoop(ServerMainThread)|O|
+|김용채|CreateServerReceiveThread|O|
+|김용채|CreateClientNetworkThread|O|
 
 ### 3. Send/Recv/Process Packet
-|ㅣ|담당자|ㅣ|주요 기능|ㅣ|완성 여부|ㅣ|
-|---|:---:|---|:---:|---|:---:|---|
-|ㅣ|임성훈|ㅣ|PacketInputKey/PacketInputspecialKey|ㅣ|O|ㅣ|
-|ㅣ|임성훈|ㅣ|PacketChatMessage, BroadCastChatMessage|ㅣ|O|ㅣ|
-|ㅣ|임성훈|ㅣ|PacketGameover|ㅣ|O|ㅣ|
-|ㅣ|박지성|ㅣ|PacketRenderData|ㅣ|O|ㅣ|
-|ㅣ|김용채|ㅣ|PacketLogin/PacketLoginResult/PacketGameReady|ㅣ|O|ㅣ|
+|담당자|주요 기능|완성 여부|
+|:---:|:---:|:---:|
+|임성훈|PacketInputKey/PacketInputspecialKey|O|
+|임성훈|PacketChatMessage, BroadCastChatMessage|O|
+|임성훈|PacketGameover|O|
+|박지성|PacketRenderData|O|
+|김용채|PacketLogin/PacketLoginResult/PacketGameReady|O|
 
 ### 4. Additional Content
-|ㅣ|담당자|ㅣ|주요 기능|ㅣ|완성 여부|ㅣ|
-|---|:---:|---|:---:|---|:---:|---|
-|ㅣ|임성훈|ㅣ|Chat|ㅣ|O|ㅣ|
-|ㅣ|임성훈|ㅣ|Player_Tackle|ㅣ|O|ㅣ|
-|ㅣ|김용채|ㅣ|Login|ㅣ|O|ㅣ|
+|담당자|주요 기능|완성 여부|
+|:---:|:---:|:---:|
+|임성훈|Chat/ChatUI|O|
+|임성훈|GameOver/GameOverScene|O|
+|임성훈|Player_Tackle|O|
+|박지성|LoginScene|O|
+|김용채|Login/LoginUI|O|
