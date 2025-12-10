@@ -2,3 +2,6 @@ dlatjdgns 11 2
 kimyc 11 1
 kimyc 11 1
 qwer 11 2
+
+dlatjdgns2 0 0
+dlatjdgns3 0 0
